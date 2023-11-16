@@ -1,0 +1,17 @@
+export const colors = {
+  gray100: "#F2F2F2",
+  gray200: "#9E9E9E",
+  gray300: "#7D8398",
+  gray500: "#121212",
+  primary: "#101828",
+  bg100: "rgba(125, 131, 152, 0.06)",
+  bg200: "#F8F8F8",
+  bg300: "#FCFCFC",
+  white: "#FFFFFF",
+  yellow: "#D6A243",
+  yellowBG: "rgba(214, 162, 67, 0.12)",
+  green: "#91C561",
+  greenBG: "rgba(145, 197, 97, 0.12)",
+  red: "#d65943",
+  redBG: "rgba(197, 97, 97, 0.12)",
+}
