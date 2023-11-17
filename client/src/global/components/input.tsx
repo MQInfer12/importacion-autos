@@ -4,14 +4,16 @@ import { colors } from '../styles/colors'
 
 interface Props {
   value: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   type?: string
   disabled?: boolean
 }
 
-const Input = ({ placeholder, type = "text", disabled, value }: Props) => {
+const Input = ({ placeholder, type = "text", disabled, value, onChange }: Props) => {
   return (
     <StyledInput 
+      onChange={onChange}
       placeholder={placeholder}
       type={type}
       disabled={disabled}

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { mixins } from '../styles/mixins'
+import { colors } from '../styles/colors'
 
 interface FormProps {
   children: JSX.Element[] | JSX.Element
@@ -14,14 +15,19 @@ const Form = ({ children }: FormProps) => {
 }
 
 interface FormSectionProps {
+  input?: JSX.Element
   children: JSX.Element[] | JSX.Element
-  text: string
+  text?: string
 }
 
-const Section = ({ children, text }: FormSectionProps) => {
+const Section = ({ children, text, input }: FormSectionProps) => {
   return (
     <FormSectionContainer>
-      <h2>{ text }</h2>
+      {text && <h2>{ text }</h2>}
+      {
+        input &&
+        <div>{ input }</div>
+      }
       <div>
         { children }
       </div>
@@ -38,7 +44,7 @@ const FormContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 12px 48px;
+  padding: 12px 48px 24px;
   overflow: auto;
 `;
 
@@ -48,6 +54,10 @@ const FormSectionContainer = styled.div`
   gap: 16px;
   border-bottom: ${mixins.border1};
   padding: 24px 0 36px;
+  & > h2 {
+    font-size: 1.4rem;
+    color: ${colors.primary};
+  }
   & > div {
     display: flex;
     gap: 24px 48px;

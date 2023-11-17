@@ -1,94 +1,406 @@
 import Button from "../../../global/components/button"
-import FileInput from "../../../global/components/fileInput"
 import Form from "../../../global/components/form"
 import Input from "../../../global/components/input"
 import InputContainer from "../../../global/components/inputContainer"
 import styled from 'styled-components'
-import { useState } from 'react'
 import CheckInput from "../../../global/components/checkInput"
+import Select from "../../../global/components/select"
+import Users from "../../../data/users.json"
+import { useState } from "react"
+import { User } from "../../../global/interfaces/user"
 
 const Content = () => {
-  const signatureState = useState<null | File>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const handleChangeUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedUserId(e.target.value)
+  }
+  const selectedUser: User | undefined = Users.find(user => user.id === Number(selectedUserId));
+
+  const hoy = new Date();
+  const [form, setForm] = useState({
+    importadoraNombre: "",
+    importadoraEncargado: "",
+    importadoraRUT: "",
+    importadoraDireccion: "",
+    formularioFecha: `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`,
+    formularioCiudad: "Cochabamba",
+    formularioPais: "Bolivia",
+    vehiculoMarca: "",
+    vehiculoModelo: "",
+    vehiculoYear: "",
+    vehiculoVIN: "",
+    vehiculoOBS: "",
+    vehiculoOtros: "",
+    documentoInvoice: false,
+    documentoSwift: false,
+    documentoDispach: false,
+    documentoBL: false,
+    documentoOtros: false,
+    pagoTransferencia: false,
+    pagoDeposito: false,
+    pagoCobro: false,
+    pagoOtros: false,
+    legalidadVINDias: "",
+    legalidadVINFecha: "",
+    legalidadCompraInternacionalDias: "",
+    legalidadCompraInternacionalFecha: "",
+    legalidadOtrosServiciosDias: "",
+    legalidadOtrosServiciosFecha: "",
+    legalidadComisionesDias: "",
+    legalidadComisionesFecha: "",
+    legalidadOtrosValoresDias: "",
+    legalidadOtrosValoresFecha: "",
+    legalidadVariosDias: "",
+    legalidadVariosFecha: "",
+    serviciosCompraVehiculo: "",
+    serviciosRepresentacionMandato: "",
+    serviciosCargosNaviero: "",
+    serviciosCargosGruas: "",
+    serviciosMultas: "",
+    anticiposCompraVehiculo: "",
+    anticiposServicios: "",
+    saldoPorCobrar: "",
+    formularioAutor: "",
+    formularioRecibidoConforme: ""
+  });
 
   return (
     <Form>
+      <Form.Section text="Datos de la importadora">
+        <InputContainer text="Nombre de empresa">
+          <Input 
+            value={form.importadoraNombre}
+            onChange={e => setForm(old => ({...old, importadoraNombre: e.target.value }))}
+          />
+        </InputContainer>
+        <InputContainer text="Encargado">
+          <Input 
+            value={form.importadoraEncargado}
+            onChange={e => setForm(old => ({...old, importadoraEncargado: e.target.value }))}
+          />
+        </InputContainer>
+        <InputContainer text="RUT No.">
+          <Input 
+            value={form.importadoraRUT}
+            onChange={e => setForm(old => ({...old, importadoraRUT: e.target.value }))}
+          />
+        </InputContainer>
+        <InputContainer text="Dirección">
+          <Input 
+            value={form.importadoraDireccion}
+            onChange={e => setForm(old => ({...old, importadoraDireccion: e.target.value }))}
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section text="Datos del mandante"
+        input={
+          <InputContainer text="Seleccionar cliente">
+            <Select 
+              defaultOption="Seleccionar cliente"
+              onChange={handleChangeUser}
+            >
+              {Users.map(user => <option value={user.id}>{user.nombre}</option>)}
+            </Select>
+          </InputContainer>
+        }
+      >
+        <InputContainer text="Nombre del cliente">
+          <Input 
+            value={selectedUser?.nombre || ""}
+            disabled
+          />
+        </InputContainer>
+        <InputContainer text="RUT/DIN No.">
+          <Input 
+            value={selectedUser?.RUT || ""}
+            disabled
+          />
+        </InputContainer>
+        <InputContainer text="Domiciliado en">
+          <Input 
+            value={selectedUser?.domicilio || ""}
+            disabled
+          />
+        </InputContainer>
+        <InputContainer text="Nacionalidad">
+          <Input 
+            value={selectedUser?.nacionalidad || ""}
+            disabled
+          />
+        </InputContainer>
+        <InputContainer text="Profesión">
+          <Input 
+            value={selectedUser?.profesion || ""}
+            disabled
+          />
+        </InputContainer>
+        <InputContainer text="Correo electrónico">
+          <Input 
+            value={selectedUser?.correo || ""}
+            disabled
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section text="Detalles del formulario">
+        <InputContainer text="Fecha">
+          <Input 
+            value={form.formularioFecha}
+            onChange={e => setForm(old => ({...old, formularioFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Ciudad">
+          <Input 
+            value={form.formularioCiudad}
+            onChange={e => setForm(old => ({...old, formularioCiudad: e.target.value }))}
+          />
+        </InputContainer>
+        <InputContainer text="País">
+          <Input 
+            value={form.formularioPais}
+            onChange={e => setForm(old => ({...old, formularioPais: e.target.value }))}
+          />
+        </InputContainer>
+      </Form.Section>
       <Form.Section text="El mandante require el vehículo">
         <InputContainer text="Marca">
           <Input 
-            value=""
+            value={form.vehiculoMarca}
+            onChange={e => setForm(old => ({...old, vehiculoMarca: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="Modelo">
           <Input 
-            value=""
+            value={form.vehiculoModelo}
+            onChange={e => setForm(old => ({...old, vehiculoModelo: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="Año">
           <Input 
-            value=""
+            value={form.vehiculoYear}
+            onChange={e => setForm(old => ({...old, vehiculoYear: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="VIN">
           <Input 
-            value=""
+            value={form.vehiculoVIN}
+            onChange={e => setForm(old => ({...old, vehiculoVIN: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="OBS.">
           <Input 
-            value=""
+            value={form.vehiculoOBS}
+            onChange={e => setForm(old => ({...old, vehiculoOBS: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="Otros">
           <Input 
-            value=""
+            value={form.vehiculoOtros}
+            onChange={e => setForm(old => ({...old, vehiculoOtros: e.target.value }))}
           />
         </InputContainer>
       </Form.Section>
       <Form.Section text="Documentos adjuntos">
         <CheckInput 
           text="Invoice"
+          value={form.documentoInvoice}
+          onChange={e => setForm(old => ({...old, documentoInvoice: e.target.checked }))}
         />
         <CheckInput 
           text="Swift bancario"
+          value={form.documentoSwift}
+          onChange={e => setForm(old => ({...old, documentoSwift: e.target.checked }))}
         />
         <CheckInput 
           text="Central dispach"
+          value={form.documentoDispach}
+          onChange={e => setForm(old => ({...old, documentoDispach: e.target.checked }))}
         />
         <CheckInput 
           text="BL."
+          value={form.documentoBL}
+          onChange={e => setForm(old => ({...old, documentoBL: e.target.checked }))}
         />
         <CheckInput 
           text="Otros"
+          value={form.documentoOtros}
+          onChange={e => setForm(old => ({...old, documentoOtros: e.target.checked }))}
         />
       </Form.Section>
       <Form.Section text="Formas de pago">
         <CheckInput 
           text="Transferencia bancaria"
+          value={form.pagoTransferencia}
+          onChange={e => setForm(old => ({...old, pagoTransferencia: e.target.checked }))}
         />
         <CheckInput 
           text="Depósito directo"
+          value={form.pagoDeposito}
+          onChange={e => setForm(old => ({...old, pagoDeposito: e.target.checked }))}
         />
         <CheckInput 
           text="Cobro por caja sala VTA. BOL"
+          value={form.pagoCobro}
+          onChange={e => setForm(old => ({...old, pagoCobro: e.target.checked }))}
         />
         <CheckInput 
           text="Otros"
+          value={form.pagoOtros}
+          onChange={e => setForm(old => ({...old, pagoOtros: e.target.checked }))}
         />
       </Form.Section>
-      <Form.Section text="Legalidad">
+      <Form.Section text="Legalidad (días, vencimiento)">
         <InputContainer text="VIN">
           <Input 
-            value=""
+            value={form.legalidadVINDias}
+            onChange={e => setForm(old => ({...old, legalidadVINDias: e.target.value }))}
             placeholder="Días"
           />
           <Input 
-            value=""
-            placeholder="Vence el"
+            value={form.legalidadVINFecha}
+            onChange={e => setForm(old => ({...old, legalidadVINFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Compra internacional">
+          <Input 
+            value={form.legalidadCompraInternacionalDias}
+            onChange={e => setForm(old => ({...old, legalidadCompraInternacionalDias: e.target.value }))}
+            placeholder="Días"
+          />
+          <Input 
+            value={form.legalidadCompraInternacionalFecha}
+            onChange={e => setForm(old => ({...old, legalidadCompraInternacionalFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Otros servicios">
+          <Input 
+            value={form.legalidadOtrosServiciosDias}
+            onChange={e => setForm(old => ({...old, legalidadOtrosServiciosDias: e.target.value }))}
+            placeholder="Días"
+          />
+          <Input 
+            value={form.legalidadOtrosServiciosFecha}
+            onChange={e => setForm(old => ({...old, legalidadOtrosServiciosFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Comisiones varias">
+          <Input 
+            value={form.legalidadComisionesDias}
+            onChange={e => setForm(old => ({...old, legalidadComisionesDias: e.target.value }))}
+            placeholder="Días"
+          />
+          <Input 
+            value={form.legalidadComisionesFecha}
+            onChange={e => setForm(old => ({...old, legalidadComisionesFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Otros valores">
+          <Input 
+            value={form.legalidadOtrosValoresDias}
+            onChange={e => setForm(old => ({...old, legalidadOtrosValoresDias: e.target.value }))}
+            placeholder="Días"
+          />
+          <Input 
+            value={form.legalidadOtrosValoresFecha}
+            onChange={e => setForm(old => ({...old, legalidadOtrosValoresFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+        <InputContainer text="Varios">
+          <Input 
+            value={form.legalidadVariosDias}
+            onChange={e => setForm(old => ({...old, legalidadVariosDias: e.target.value }))}
+            placeholder="Días"
+          />
+          <Input 
+            value={form.legalidadVariosFecha}
+            onChange={e => setForm(old => ({...old, legalidadVariosFecha: e.target.value }))}
+            type="date"
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section text="Servicios logísticos a cobrar (US$)">
+        <InputContainer text="Compra del vehículo con mandato">
+          <Input 
+            value={form.serviciosCompraVehiculo}
+            onChange={e => setForm(old => ({...old, serviciosCompraVehiculo: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+        <InputContainer text="Serv. de representación con mandato">
+          <Input 
+            value={form.serviciosRepresentacionMandato}
+            onChange={e => setForm(old => ({...old, serviciosRepresentacionMandato: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+        <InputContainer text="Serv. cargos por flete naviero">
+          <Input 
+            value={form.serviciosCargosNaviero}
+            onChange={e => setForm(old => ({...old, serviciosCargosNaviero: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+        <InputContainer text="Serv. cargos por servicios grúas">
+          <Input 
+            value={form.serviciosCargosGruas}
+            onChange={e => setForm(old => ({...old, serviciosCargosGruas: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+        <InputContainer text="Cargos por servicios de multas">
+          <Input 
+            value={form.serviciosMultas}
+            onChange={e => setForm(old => ({...old, serviciosMultas: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section text="Anticipos recibidos (US$)">
+        <InputContainer text="Compra del vehículo">
+          <Input 
+            value={form.anticiposCompraVehiculo}
+            onChange={e => setForm(old => ({...old, anticiposCompraVehiculo: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+        <InputContainer text="Servicios logísticos">
+          <Input 
+            value={form.anticiposServicios}
+            onChange={e => setForm(old => ({...old, anticiposServicios: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section>
+        <InputContainer text="Saldo por cobrar (US$)">
+          <Input 
+            value={form.saldoPorCobrar}
+            onChange={e => setForm(old => ({...old, saldoPorCobrar: e.target.value }))}
+            type="number"
+          />
+        </InputContainer>
+      </Form.Section>
+      <Form.Section>
+        <InputContainer text="Autor del formulario">
+          <Input 
+            value={form.formularioAutor}
+            onChange={e => setForm(old => ({...old, formularioAutor: e.target.value }))}
+          />
+        </InputContainer>
+        <InputContainer text="Recibido conforme por">
+          <Input 
+            value={form.formularioRecibidoConforme}
+            onChange={e => setForm(old => ({...old, formularioRecibidoConforme: e.target.value }))}
           />
         </InputContainer>
       </Form.Section>
       <ButtonGuardarContainer>
-        <Button onClick={() => {}}>Guardar</Button>
+        <Button onClick={() => {}}>Enviar a revisión</Button>
       </ButtonGuardarContainer>
     </Form>
   )

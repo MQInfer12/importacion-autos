@@ -5,6 +5,7 @@ import Home from "./pages/home"
 import Profile from "./pages/profile"
 import User from "./pages/user"
 import FormPage from "./pages/form"
+import UserForm from "./pages/userForm"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="forms" element={<Home />} />
           <Route path="profile" element={<Profile />} />
           <Route path="user" element={<User />} />
+          <Route path="userForm" element={<UserForm />} />
           <Route path="form" element={<FormPage />} />
         </Route>
       </Routes>

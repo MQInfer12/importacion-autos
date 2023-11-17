@@ -3,12 +3,15 @@ import { mixins } from '../styles/mixins'
 import { colors } from '../styles/colors'
 
 interface Props {
-  children: JSX.Element[]
+  children: JSX.Element[] | JSX.Element
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => any
+  defaultOption?: string
 }
 
-const Select = ({ children }: Props) => {
+const Select = ({ children, defaultOption, onChange }: Props) => {
   return (
-    <StyledInput>
+    <StyledInput onChange={onChange}>
+      { defaultOption && <option value="">{ defaultOption }</option> }
       { children }
     </StyledInput>
   )

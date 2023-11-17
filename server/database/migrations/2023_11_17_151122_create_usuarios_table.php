@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string("nacionalidad")->nullable();
             $table->string("profesion")->nullable();
             $table->string("firma")->nullable();
+            $table->timestamps();
         });
     }
 

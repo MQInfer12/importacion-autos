@@ -27,13 +27,13 @@ class UsuarioController extends Controller
         $User->nacionalidad = $request->correo;
         $User->profesion = $request->telefono;
         $User->firma = $request->rol;
-        $User->password = Hash::make($request->password);
+        $User->password = bcrypt($request->password);
         $User->save();
         return response()->json([
             "status" => 1,
-            "msg" => "Registro exitoso",
+            "message" => "Registro exitoso",
+            "data" => $User
         ]);
-        
     }
 
     /**

@@ -2,8 +2,15 @@ import styled from 'styled-components'
 import Button from '../../../global/components/button';
 import Input from '../../../global/components/input';
 import Select from '../../../global/components/select';
+import { useNavigate } from 'react-router-dom';
 
 const Filter = () => {
+  const navigate = useNavigate();
+
+  const handleCreate = () => {
+    navigate("/dashboard/userForm");
+  }
+
   return (
     <Container>
       <div>
@@ -13,9 +20,10 @@ const Filter = () => {
         </Select>
         <Input 
           placeholder='Buscar...'
+          value=''
         />
       </div>
-      <Button onClick={() => {}}>Crear</Button>
+      <Button onClick={handleCreate}>Crear</Button>
     </Container>
   )
 }

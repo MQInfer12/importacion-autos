@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('idFormulario')->constrained('formularios')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("tipo");
             $table->string("dato");
+            $table->timestamps();
         });
     }
 

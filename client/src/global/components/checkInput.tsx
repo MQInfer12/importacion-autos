@@ -3,13 +3,17 @@ import { colors } from '../styles/colors'
 
 interface Props {
   text: string
+  value: boolean
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const CheckInput = ({ text }: Props) => {
+const CheckInput = ({ text, value, onChange }: Props) => {
   return (
     <Container>
       <input 
         type='checkbox' 
+        checked={value}
+        onChange={onChange}
       />
       <label>{text}</label>
     </Container>
