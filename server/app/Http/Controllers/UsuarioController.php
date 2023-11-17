@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -8,7 +9,12 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        
+        $Usuario = Usuario::all();
+        return response()->json([
+            "status" => 1,
+            "message" => "Usuario obtenidos correctamente",
+            "data" => $Usuario
+        ]);
     }
     public function registro(Request $request)
     {
@@ -67,6 +73,11 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Usuario=Usuario::destroy($id);
+        return response()->json([
+            "status" => 1,
+            "message" => "Usuario eliminado correctamente",
+            "data" => $Usuario
+        ]);
     }
 }

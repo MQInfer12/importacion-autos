@@ -17,3 +17,5 @@ use App\Http\Controllers\UsuarioController;
 
 
 Route::post('/registro', [UsuarioController::class, 'registro']);
+Route::get('/usuario', [UsuarioController::class, 'index']);
+Route::delete('/usuario/{id}', [UsuarioController::class, 'destroy']);
