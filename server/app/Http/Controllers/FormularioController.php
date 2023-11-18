@@ -19,20 +19,18 @@ class FormularioController extends Controller
     }
     public function store(Request $request)
     {
+        $year = date('Y');
         $request->validate([
             'idUsuario' => 'required|integer',
-            'estado' => 'required|in:Nuevo,Firmado,Declinado',
             'observacion' => 'nullable|string'
-        ],[
-            ''
         ]);
         $Formulario = new Formulario();
         $Formulario->idUsuario = $request->idUsuario;
-        $Formulario->OT = $request->OT;
-        $Formulario->estado = $request->estado;
-        $Formulario->observacion = $request->observacion;
+        $Formulario->OT = '';
+        $Formulario->estado = "Nuevo";
+        $Formulario->observacion =null;
         $Formulario->save();
-
+        $Formulario->OT=$Formulario->id."-".$year;
         return response()->json([
             'status' => 1,
             'message' => 'Formulario creado correctamente',
@@ -54,6 +52,18 @@ class FormularioController extends Controller
                 'message' => "Formulario no encontrado"
             ]);
         }
+    }
+    public function update(Request $request, $id)
+    {
+        $Formulario = Formulario::find($id);
+        $Formulario->estado = $request->estado;
+        $Formulario->observacion = $request->observacion;
+        $Formulario->save();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Formulario actualizado',
+            'data' => $Formulario
+        ]);
     }
     public function destroy($id)
     {

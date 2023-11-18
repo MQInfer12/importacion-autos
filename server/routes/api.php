@@ -4,7 +4,7 @@ use App\Http\Controllers\FormularioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
-
+use App\Http\Controllers\RespuestaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,3 +25,11 @@ Route::get('/perfilusuario', [UsuarioController::class, 'usuarioPerfil']);
 
 Route::post('/formulario', [FormularioController::class, 'store']);
 Route::get('/formulario', [FormularioController::class, 'index']);
+Route::get('/formulario/{id}', [FormularioController::class, 'show']);
+Route::put('/formulario/{id}', [FormularioController::class, 'update']);
+Route::delete('/formulario/{id}', [FormularioController::class, 'destroy']);
+
+Route::post('/respuesta', [RespuestaController::class, 'store']);
+Route::get('/respuesta', [RespuestaController::class, 'index']);
+Route::put('/respuesta/{id}', [RespuestaController::class, 'update']);
+Route::delete('/respuesta/{id}', [RespuestaController::class, 'destroy']);
