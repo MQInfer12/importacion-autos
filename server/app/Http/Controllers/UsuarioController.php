@@ -52,6 +52,27 @@ class UsuarioController extends Controller
             "data" => $User
         ]);
     }
+    public function update(Request $request, $id)
+    {
+        
+        $User = Usuario::find($id);
+        $User->nombre = $request->nombre;
+        $User->correo = $request->correo;
+        $User->rol = $request->rol;
+        $User->RUT = $request->RUT;
+        $User->domicilio = $request->domicilio;
+        $User->nacionalidad = $request->nacionalidad;
+        $User->profesion = $request->profesion;
+        $User->firma = $request->firma;
+        $User->password = bcrypt($request->password);
+        $User->save();
+        return response()->json([
+            "status" => 1,
+            "message" => "Usuario actualziado correctamente",
+            "data" => $User
+        ]);
+    }
+
     public function destroy($id)
     {
         $Usuario = Usuario::destroy($id);

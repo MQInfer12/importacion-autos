@@ -22,6 +22,8 @@ Route::get('/usuario', [UsuarioController::class, 'index']);
 Route::delete('/usuario/{id}', [UsuarioController::class, 'destroy']);
 Route::post('/login', [UsuarioController::class, 'login']);
 Route::get('/perfilusuario', [UsuarioController::class, 'usuarioPerfil']);
+Route::put('/usuario/{id}', [UsuarioController::class, 'update']);
+
 
 Route::post('/formulario', [FormularioController::class, 'store']);
 Route::get('/formulario', [FormularioController::class, 'index']);
