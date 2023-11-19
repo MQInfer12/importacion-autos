@@ -66,7 +66,7 @@ class UsuarioController extends Controller
         $User->save();
         return response()->json([
             "status" => 1,
-            "message" => "Usuario actualziado correctamente",
+            "message" => "Usuario actualizado correctamente",
             "data" => $User
         ]);
     }

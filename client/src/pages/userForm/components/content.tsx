@@ -30,7 +30,9 @@ const Content = ({ user }: Props) => {
 
   const handleSend = async () => {
     setLoading(true);
-    const res = await sendRequest("registro", form);
+    const res = await sendRequest(user ? `usuario/${user.id}` : "registro", form, {
+      method: user ? "PUT" : "POST"
+    });
     if(res) {
       Swal.fire({
         title: res.status === 1 ? "Éxito" : "Error",
@@ -51,14 +53,18 @@ const Content = ({ user }: Props) => {
           <Input 
             value={form.correo}
             onChange={e => setForm(old => ({...old, correo: e.target.value }))}
+            disabled={!!user}
           />
         </InputContainer>
-        <InputContainer text="Contraseña">
-          <Input 
-            value={form.password}
-            onChange={e => setForm(old => ({...old, password: e.target.value }))}
-          />
-        </InputContainer>
+        {
+          !user ?
+          <InputContainer text="Contraseña">
+            <Input 
+              value={form.password}
+              onChange={e => setForm(old => ({...old, password: e.target.value }))}
+            />
+          </InputContainer> : <></>
+        }
         <InputContainer text="Nombre">
           <Input 
             value={form.nombre}
