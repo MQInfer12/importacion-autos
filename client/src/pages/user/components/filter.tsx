@@ -1,10 +1,14 @@
 import styled from 'styled-components'
 import Button from '../../../global/components/button';
 import Input from '../../../global/components/input';
-import Select from '../../../global/components/select';
 import { useNavigate } from 'react-router-dom';
 
-const Filter = () => {
+interface Props {
+  filter: string
+  setFilter: React.Dispatch<React.SetStateAction<string>>
+}
+
+const Filter = ({ filter, setFilter }: Props) => {
   const navigate = useNavigate();
 
   const handleCreate = () => {
@@ -14,13 +18,10 @@ const Filter = () => {
   return (
     <Container>
       <div>
-        <Select>
-          <option value="">Nombre</option>
-          <option value="">Fecha</option>
-        </Select>
         <Input 
-          placeholder='Buscar...'
-          value=''
+          placeholder='Buscar por nombre...'
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
         />
       </div>
       <Button onClick={handleCreate}>Crear</Button>

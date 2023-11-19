@@ -6,7 +6,8 @@ interface Options {
 
 type ApiResponse<T> = {
   message: string, 
-  data: T
+  data: T,
+  status: number
 }
 
 export const sendRequest = async <T,>(route: string, body: Record<string, any> | null, options?: Options) => {
@@ -21,8 +22,6 @@ export const sendRequest = async <T,>(route: string, body: Record<string, any> |
     },
     body: thisOptions.method !== "GET" ? JSON.stringify(body || {}) : undefined
   });
-  if(res.ok) {
-    const json: ApiResponse<T> = await res.json();
-    return json;
-  }
+  const json: ApiResponse<T> = await res.json();
+  return json;
 }

@@ -6,24 +6,42 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import Select from "../../../global/components/select"
 import { sendRequest } from "../../../utilities/sendRequest"
+import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
+import { User } from "../../../global/interfaces/user"
 
-const Content = () => {
+interface Props {
+  user?: User
+}
+
+const Content = ({ user }: Props) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    correo: "",
+    correo: user?.correo || "",
     password: "",
-    nombre: "",
-    rol: "Admin",
-    RUT: "",
-    domicilio: "",
-    nacionalidad: "",
-    profesion: ""
+    nombre: user?.nombre || "",
+    rol: user?.rol || "Admin",
+    RUT: user?.RUT || "",
+    domicilio: user?.domicilio || "",
+    nacionalidad: user?.nacionalidad || "",
+    profesion: user?.profesion || ""
   });
 
   const handleSend = async () => {
+    setLoading(true);
     const res = await sendRequest("registro", form);
     if(res) {
-      alert(res.message);
+      Swal.fire({
+        title: res.status === 1 ? "Éxito" : "Error",
+        icon: res.status === 1 ? "success" : "error",
+        text: res.message
+      });
+      if(res.status === 1) {
+        navigate("/dashboard/user");
+      }
     }
+    setLoading(false);
   }
 
   return (
@@ -48,7 +66,7 @@ const Content = () => {
           />
         </InputContainer>
         <InputContainer text="Rol">
-          <Select onChange={e => setForm(old => ({...old, rol: e.target.value}))}>
+          <Select value={form.rol} onChange={e => setForm(old => ({...old, rol: e.target.value}))}>
             <option value="Admin">Admin</option>
             <option value="Cliente">Cliente</option>
           </Select>
@@ -84,7 +102,7 @@ const Content = () => {
         </Form.Section> : <></>
       }
       <ButtonGuardarContainer>
-        <Button onClick={handleSend}>Crear</Button>
+        <Button loading={loading} onClick={handleSend}>{user ? "Editar" : "Crear"}</Button>
       </ButtonGuardarContainer>
     </Form>
   )

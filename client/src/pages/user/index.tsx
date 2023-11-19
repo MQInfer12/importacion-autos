@@ -1,22 +1,35 @@
+import { User } from "../../global/interfaces/user"
 import { colors } from "../../global/styles/colors"
 import { mixins } from "../../global/styles/mixins"
+import { useGet } from "../../hooks/useGet"
 import Filter from "./components/filter"
 import Table from "./components/table"
 import styled from "styled-components"
+import { useState } from 'react'
+import { filterBy } from "../../utilities/filterBy"
 
-const User = () => {
+const UserPage = () => {
+  const { res, getData } = useGet<User[]>("usuario");
+  const [filter, setFilter] = useState("");
+
   return (
     <Container>
       <h2>Usuarios</h2>
       <div>
-        <Filter />
-        <Table />
+        <Filter 
+          filter={filter}
+          setFilter={setFilter}
+        />
+        <Table 
+          data={res?.data.filter(user => filterBy(user.nombre, filter))}
+          getData={getData}
+        />
       </div>
     </Container>
   )
 }
 
-export default User
+export default UserPage
 
 const Container = styled.div`
   width: 100%;

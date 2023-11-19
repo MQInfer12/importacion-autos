@@ -2,13 +2,26 @@ import styled from 'styled-components'
 import { colors } from '../../global/styles/colors';
 import { mixins } from '../../global/styles/mixins';
 import Content from './components/content';
+import { useParams } from 'react-router-dom';
+import { useGet } from '../../hooks/useGet';
+import Loading from '../../global/components/loading';
+import { User } from '../../global/interfaces/user';
 
 const UserForm = () => {
+  const { id } = useParams();
+  const { res, loading } = useGet<User>(`usuario/${id}`, !!id);
+
   return (
     <Container>
-      <h2>Crear usuario</h2>
+      <h2>{id ? "Editar" : "Crear"} usuario</h2>
       <div>
-        <Content />
+        {
+          loading ?
+          <Loading /> :
+          <Content 
+            user={res?.data}
+          />
+        }
       </div>
     </Container>
   )

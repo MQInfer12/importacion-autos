@@ -2,56 +2,77 @@ import styled from 'styled-components'
 import { mixins } from '../../../global/styles/mixins';
 import { colors } from '../../../global/styles/colors';
 import Button from '../../../global/components/button';
+import { User } from '../../../global/interfaces/user';
+import { sendRequest } from '../../../utilities/sendRequest';
+import Loading from '../../../global/components/loading';
+import Swal from 'sweetalert2';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
-const Table = () => {
+interface Props {
+  data: User[] | undefined
+  getData: () => void
+}
+
+const Table = ({ data, getData }: Props) => {
+  const [loading, setLoading] = useState<null | number>(null);
+  const navigate  = useNavigate();
+
+  const handleDelete = async (id: number) => {
+    setLoading(id);
+    const res = await sendRequest(`usuario/${id}`, null, {
+      method: "DELETE"
+    });
+    if(res) {
+      Swal.fire({
+        title: "Éxito",
+        icon: "success",
+        text: res.message
+      });
+      getData();
+    }
+    setLoading(null);
+  }
+
   return (
     <Container>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre de usuario</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>Admin</td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>Cliente</td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>Cliente</td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>Admin</td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>Cliente</td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {
+        data ?
+        <table>
+          <thead>
+            <tr>
+              <th>Correo electrónico</th>
+              <th>Nombre de usuario</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              data.map(user => (
+                <tr key={user.id}>
+                  <td>{user.correo}</td>
+                  <td>{user.nombre}</td>
+                  <td>{user.rol}</td>
+                  <td>
+                    <div className='buttons'>
+                      <Button 
+                        onClick={() => navigate(`/dashboard/userForm/${user.id}`)}
+                      >Editar</Button>
+                      <Button 
+                        type="secondary" 
+                        onClick={() => handleDelete(user.id)}
+                        loading={loading === user.id}
+                      >Eliminar</Button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        : <Loading />
+      }
     </Container>
   )
 }
@@ -107,6 +128,10 @@ const Container = styled.div`
     & > tbody {
       tr:nth-child(even) {
         background-color: ${colors.bg200};
+      }
+      & .buttons {
+        display: flex;
+        gap: 16px;
       }
     }
   }
