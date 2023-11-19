@@ -6,7 +6,7 @@ type ButtonType = "primary" | "secondary";
 
 interface Props {
   children: string
-  onClick: () => any
+  onClick: (...args: any[]) => any
   disabled?: boolean
   type?: ButtonType
   loading?: boolean
@@ -39,6 +39,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   box-shadow: ${mixins.shadow100};
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
   &:hover {
     opacity: 0.8;
   }

@@ -34,6 +34,8 @@ const Container = styled.div`
   padding: 0 24px;
   height: 90px;
   flex: 0 0 auto;
+  gap: 24px;
+  overflow: auto;
   & > div {
     display: flex;
     gap: 16px;
