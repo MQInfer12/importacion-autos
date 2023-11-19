@@ -64,7 +64,6 @@ class UsuarioController extends Controller
         $User->nacionalidad = $request->nacionalidad;
         $User->profesion = $request->profesion;
         $User->firma = $request->firma;
-        $User->password = bcrypt($request->password);
         $User->save();
         return response()->json([
             "status" => 1,
