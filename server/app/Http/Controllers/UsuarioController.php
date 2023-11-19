@@ -71,6 +71,22 @@ class UsuarioController extends Controller
             "data" => $User
         ]);
     }
+    public function show($id)
+    {
+        $Usuario = Usuario::find($id);
+        if ($Usuario) {
+            return response()->json([
+                'status' => 1,
+                'message' => "Usuario encontrada",
+                "data" => $Usuario
+            ]);
+        } else {
+            return response()->json([
+                'status' => 1,
+                'message' => "Usuario no encontrada"
+            ]);
+        }
+    }
 
     public function destroy($id)
     {
