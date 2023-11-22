@@ -12,16 +12,34 @@ const Content = () => {
   return (
     <Form>
       <Form.Section text="Datos">
+        <InputContainer text="Correo electrónico">
+          <Input 
+            value="maummq@gmail.com"
+          />
+        </InputContainer>
         <InputContainer text="Nombre de usuario">
           <Input 
             value="Mauricio"
           />
         </InputContainer>
-        <InputContainer text="Contraseña">
+        <InputContainer text="RUT">
           <Input 
-            value="password"
-            type="password"
-            disabled
+            value="Mauricio"
+          />
+        </InputContainer>
+        <InputContainer text="Domicilio">
+          <Input 
+            value="Mauricio"
+          />
+        </InputContainer>
+        <InputContainer text="Nacionalidad">
+          <Input 
+            value="Mauricio"
+          />
+        </InputContainer>
+        <InputContainer text="Profesión">
+          <Input 
+            value="Mauricio"
           />
         </InputContainer>
       </Form.Section>

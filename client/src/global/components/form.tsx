@@ -46,6 +46,10 @@ const FormContainer = styled.div`
   flex-direction: column;
   padding: 12px 48px 24px;
   overflow: auto;
+
+  @media screen and (max-width: 640px) {
+    padding: 12px 24px 24px;
+  }
 `;
 
 const FormSectionContainer = styled.div`

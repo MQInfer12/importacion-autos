@@ -4,13 +4,14 @@ import { colors } from '../styles/colors'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
+  value?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => any
   defaultOption?: string
 }
 
-const Select = ({ children, defaultOption, onChange }: Props) => {
+const Select = ({ children, defaultOption, onChange, value }: Props) => {
   return (
-    <StyledInput onChange={onChange}>
+    <StyledInput value={value} onChange={onChange}>
       { defaultOption && <option value="">{ defaultOption }</option> }
       { children }
     </StyledInput>

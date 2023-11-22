@@ -6,18 +6,21 @@ type ButtonType = "primary" | "secondary";
 
 interface Props {
   children: string
-  onClick: () => any
+  onClick: (...args: any[]) => any
   disabled?: boolean
   type?: ButtonType
+  loading?: boolean
 }
 
-const Button = ({ children, onClick, disabled, type = "primary" }: Props) => {
+const Button = ({ children, onClick, disabled, type = "primary", loading }: Props) => {
   return (
     <StyledButton
       onClick={onClick}
-      disabled={disabled}
+      disabled={loading || disabled}
       type={type}
-    >{children}</StyledButton>
+    >
+      {loading ? "Cargando..." : children}
+    </StyledButton>
   )
 }
 
@@ -36,6 +39,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   box-shadow: ${mixins.shadow100};
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
   &:hover {
     opacity: 0.8;
   }

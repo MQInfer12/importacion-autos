@@ -54,7 +54,6 @@ class UsuarioController extends Controller
     }
     public function update(Request $request, $id)
     {
-        
         $User = Usuario::find($id);
         $User->nombre = $request->nombre;
         $User->correo = $request->correo;
@@ -67,7 +66,7 @@ class UsuarioController extends Controller
         $User->save();
         return response()->json([
             "status" => 1,
-            "message" => "Usuario actualziado correctamente",
+            "message" => "Usuario actualizado correctamente",
             "data" => $User
         ]);
     }
