@@ -1,71 +1,53 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../global/components/button';
+import Loading from '../../../global/components/loading';
+import { FormularioRes } from '../../../global/interfaces/formulario';
 import { TableContainer } from '../../../global/styles/components';
 
-const Table = () => {
+interface Props {
+  data: FormularioRes[] | undefined
+  getData: () => void
+}
+
+const Table = ({ data, getData }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <TableContainer>
-      <table>
-        <thead>
-          <tr>
-            <th className='big'>Nombre del cliente</th>
-            <th className='medium'>Fecha</th>
-            <th className='medium'>Estado</th>
-            <th className='big'>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>16-11-2023</td>
-            <td>
-              <p className="Nuevo">Nuevo</p>
-            </td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>16-11-2023</td>
-            <td>
-              <p className="Firmado">Firmado</p>
-            </td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>16-11-2023</td>
-            <td>
-              <p className="Firmado">Firmado</p>
-            </td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>16-11-2023</td>
-            <td>
-              <p className="Declinado">Declinado</p>
-            </td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mauricio Molina</td>
-            <td>16-11-2023</td>
-            <td>
-              <p className="Declinado">Declinado</p>
-            </td>
-            <td>
-              <Button type="secondary" onClick={() => {}}>Eliminar</Button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {
+        data ?
+        <table>
+          <thead>
+            <tr>
+              <th className='big'>Nombre del cliente</th>
+              <th className='medium'>Fecha</th>
+              <th className='medium'>Estado</th>
+              <th className='big'>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              data.map(formulario => (
+                <tr key={formulario.id}>
+                  <td>{formulario.nombre_usuario}</td>
+                  <td>{formulario.fecha}</td>
+                  <td>
+                    <p className={formulario.estado}>{formulario.estado}</p>
+                  </td>
+                  <td>
+                    <div className='buttons'>
+                      <Button type="primary" onClick={() => navigate(`/dashboard/form/${formulario.id}`)}>Ver</Button>
+                      <Button type="secondary" onClick={() => {}}>Eliminar</Button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        :
+        <Loading />
+      }
     </TableContainer>
   )
 }

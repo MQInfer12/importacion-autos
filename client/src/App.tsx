@@ -19,6 +19,7 @@ function App() {
           <Route path="userForm" element={<UserForm />} />
           <Route path="userForm/:id" element={<UserForm />} />
           <Route path="form" element={<FormPage />} />
+          <Route path="form/:id" element={<FormPage />} />
         </Route>
       </Routes>
     </HashRouter>

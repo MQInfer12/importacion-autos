@@ -23,7 +23,9 @@ Route::delete('/usuario/{id}', [UsuarioController::class, 'destroy']);
 Route::post('/login', [UsuarioController::class, 'login']);
 Route::get('/perfilusuario', [UsuarioController::class, 'usuarioPerfil']);
 Route::put('/usuario/{id}', [UsuarioController::class, 'update']);
-Route::post('/usuario/{id}', [UsuarioController::class, 'show']);
+Route::get('/usuario/{id}', [UsuarioController::class, 'show']);
+Route::get('/cliente', [UsuarioController::class, 'cliente']);
+
 
 
 

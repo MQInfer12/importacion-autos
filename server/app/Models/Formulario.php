@@ -14,4 +14,13 @@ class Formulario extends Model
         'observacion',
         'idUsuario',
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'idUsuario');
+    }
+    public function respuestas()
+    {
+        return $this->hasMany(Respuesta::class, 'idFormulario');
+    }
 }

@@ -13,4 +13,8 @@ class Respuesta extends Model
         "tipo",
         "dato",
     ];
+    public function formulario()
+    {
+        return $this->belongsTo(Formulario::class, 'idFormulario');
+    }
 }

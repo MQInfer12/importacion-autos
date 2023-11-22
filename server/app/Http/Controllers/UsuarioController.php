@@ -20,6 +20,15 @@ class UsuarioController extends Controller
             "data" => $Usuario
         ]);
     }
+    public function cliente()
+    {
+        $Cliente = Usuario::where("rol", "=", "Cliente")->get();
+        return response()->json([
+            "status" => 1,
+            "message" => "Clientes obtenidos correctamente",
+            "data" => $Cliente
+        ]);
+    }
     public function registro(Request $request)
     {
         $request->validate([
