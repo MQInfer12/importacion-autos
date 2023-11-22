@@ -24,6 +24,8 @@ Route::post('/login', [UsuarioController::class, 'login']);
 Route::get('/perfilusuario', [UsuarioController::class, 'usuarioPerfil']);
 Route::put('/usuario/{id}', [UsuarioController::class, 'update']);
 Route::get('/usuario/{id}', [UsuarioController::class, 'show']);
+Route::get('/cliente', [UsuarioController::class, 'cliente']);
+
 
 
 

@@ -10,16 +10,17 @@ interface Props {
   disabled?: boolean
   type?: ButtonType
   loading?: boolean
+  loadingText?: string
 }
 
-const Button = ({ children, onClick, disabled, type = "primary", loading }: Props) => {
+const Button = ({ children, onClick, disabled, type = "primary", loading, loadingText = "Cargando..." }: Props) => {
   return (
     <StyledButton
       onClick={onClick}
       disabled={loading || disabled}
       type={type}
     >
-      {loading ? "Cargando..." : children}
+      {loading ? loadingText : children}
     </StyledButton>
   )
 }

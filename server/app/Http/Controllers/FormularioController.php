@@ -2,35 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Respuesta;
 use Illuminate\Http\Request;
 use App\Models\Formulario;
+use Illuminate\Support\Carbon;
 
 class FormularioController extends Controller
 {
     public function index()
     {
-        $Formulario = Formulario::all();
+        $Formularios = Formulario::join("usuarios", "formularios.idUsuario", "=", "usuarios.id")
+            ->select("formularios.*", "usuarios.nombre as nombre_usuario")
+            ->get();
+
+        foreach ($Formularios as $Formulario) {
+            $Formulario->fecha = Carbon::parse($Formulario->created_at)->format('d/m/Y');
+            ;
+        }
 
         return response()->json([
             'status' => 1,
             'message' => 'Formularios recuperados correctamente',
-            'data' => $Formulario
+            'data' => $Formularios
         ]);
     }
     public function store(Request $request)
     {
-        $year = date('Y');
-        $request->validate([
-            'idUsuario' => 'required|integer',
-            'observacion' => 'nullable|string'
-        ]);
+        $request->validate(
+            [
+                'idUsuario' => 'required|integer'
+            ],
+            [
+                "idUsuario.required" => "El usuario es requerido"
+            ]
+        );
+        // CREAR FORMULARIO
         $Formulario = new Formulario();
         $Formulario->idUsuario = $request->idUsuario;
         $Formulario->OT = '';
         $Formulario->estado = "Nuevo";
-        $Formulario->observacion =null;
+        $Formulario->observacion = null;
         $Formulario->save();
-        $Formulario->OT=$Formulario->id."-".$year;
+        $year = date('Y');
+        $Formulario->OT = $Formulario->id . "-" . $year;
+
+        //CREAR LAS RESPUESTAS DEL FORMULARIO
+        $respuestas = $request->respuestas;
+        foreach ($respuestas as $key => $value) {
+            $Respuesta = new Respuesta();
+            $Respuesta->idFormulario = $Formulario->id;
+            $Respuesta->tipo = $key;
+            if ($value == null) {
+                $Respuesta->dato = "";
+            } else {
+                $Respuesta->dato = $value;
+            }
+            $Respuesta->save();
+        }
+
+        //DEVOLVEMOS EL FORMULARIO
         return response()->json([
             'status' => 1,
             'message' => 'Formulario creado correctamente',
@@ -39,7 +69,7 @@ class FormularioController extends Controller
     }
     public function show($id)
     {
-        $Formulario = Formulario::find($id);
+        $Formulario = Formulario::with("respuestas")->find($id);
         if ($Formulario) {
             return response()->json([
                 'status' => 1,
@@ -48,7 +78,7 @@ class FormularioController extends Controller
             ]);
         } else {
             return response()->json([
-                'status' => 1,
+                'status' => 2,
                 'message' => "Formulario no encontrado"
             ]);
         }

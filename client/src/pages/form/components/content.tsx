@@ -5,64 +5,129 @@ import InputContainer from "../../../global/components/inputContainer"
 import styled from 'styled-components'
 import CheckInput from "../../../global/components/checkInput"
 import Select from "../../../global/components/select"
-import Users from "../../../data/users.json"
 import { useState } from "react"
 import { User } from "../../../global/interfaces/user"
+import { sendRequest } from "../../../utilities/sendRequest"
+import Swal from "sweetalert2"
+import { Formulario } from "../interfaces/formulario"
+import { useGet } from "../../../hooks/useGet"
+import { useNavigate } from "react-router-dom"
+import { FormularioShow } from "../../../global/interfaces/formulario"
 
-const Content = () => {
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
+interface Props {
+  formulario?: FormularioShow
+}
+
+const Content = ({ formulario }: Props) => {
+  const navigate = useNavigate();
+  const { res: clientesRes } = useGet<User[]>("cliente");
+  const [selectedUserId, setSelectedUserId] = useState<string>(formulario ? String(formulario.idUsuario) : "");
   const handleChangeUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUserId(e.target.value)
   }
-  const selectedUser: User | undefined = Users.find(user => user.id === Number(selectedUserId));
+  const selectedUser: User | undefined = clientesRes?.data.find(user => user.id === Number(selectedUserId));
+
+  const getFormFromShow = () => {
+    const newForm: any = {};
+    formulario?.respuestas.forEach(respuesta => {
+      newForm[respuesta.tipo] = respuesta.dato;
+    })
+    return {
+      ...newForm,
+      documentoInvoice: newForm.documentoInvoice === "SI",
+      documentoSwift: newForm.documentoSwift === "SI",
+      documentoDispach: newForm.documentoDispach === "SI",
+      documentoBL: newForm.documentoBL === "SI",
+      documentoOtros: newForm.documentoOtros === "SI",
+      pagoTransferencia: newForm.pagoTransferencia === "SI",
+      pagoDeposito: newForm.pagoDeposito === "SI",
+      pagoCobro: newForm.pagoCobro === "SI",
+      pagoOtros: newForm.pagoOtros === "SI",
+    } as Formulario;
+  }
 
   const hoy = new Date();
-  const [form, setForm] = useState({
-    importadoraNombre: "",
-    importadoraEncargado: "",
-    importadoraRUT: "",
-    importadoraDireccion: "",
-    formularioFecha: `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`,
-    formularioCiudad: "Cochabamba",
-    formularioPais: "Bolivia",
-    vehiculoMarca: "",
-    vehiculoModelo: "",
-    vehiculoYear: "",
-    vehiculoVIN: "",
-    vehiculoOBS: "",
-    vehiculoOtros: "",
-    documentoInvoice: false,
-    documentoSwift: false,
-    documentoDispach: false,
-    documentoBL: false,
-    documentoOtros: false,
-    pagoTransferencia: false,
-    pagoDeposito: false,
-    pagoCobro: false,
-    pagoOtros: false,
-    legalidadVINDias: "",
-    legalidadVINFecha: "",
-    legalidadCompraInternacionalDias: "",
-    legalidadCompraInternacionalFecha: "",
-    legalidadOtrosServiciosDias: "",
-    legalidadOtrosServiciosFecha: "",
-    legalidadComisionesDias: "",
-    legalidadComisionesFecha: "",
-    legalidadOtrosValoresDias: "",
-    legalidadOtrosValoresFecha: "",
-    legalidadVariosDias: "",
-    legalidadVariosFecha: "",
-    serviciosCompraVehiculo: "",
-    serviciosRepresentacionMandato: "",
-    serviciosCargosNaviero: "",
-    serviciosCargosGruas: "",
-    serviciosMultas: "",
-    anticiposCompraVehiculo: "",
-    anticiposServicios: "",
-    saldoPorCobrar: "",
-    formularioAutor: "",
-    formularioRecibidoConforme: ""
-  });
+  const [form, setForm] = useState<Formulario>(
+    formulario ?
+    getFormFromShow()
+    :
+    {
+      importadoraNombre: "",
+      importadoraEncargado: "",
+      importadoraRUT: "",
+      importadoraDireccion: "",
+      formularioFecha: `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`,
+      formularioCiudad: "Cochabamba",
+      formularioPais: "Bolivia",
+      vehiculoMarca: "",
+      vehiculoModelo: "",
+      vehiculoYear: "",
+      vehiculoVIN: "",
+      vehiculoOBS: "",
+      vehiculoOtros: "",
+      documentoInvoice: false,
+      documentoSwift: false,
+      documentoDispach: false,
+      documentoBL: false,
+      documentoOtros: false,
+      pagoTransferencia: false,
+      pagoDeposito: false,
+      pagoCobro: false,
+      pagoOtros: false,
+      legalidadVINDias: "",
+      legalidadVINFecha: "",
+      legalidadCompraInternacionalDias: "",
+      legalidadCompraInternacionalFecha: "",
+      legalidadOtrosServiciosDias: "",
+      legalidadOtrosServiciosFecha: "",
+      legalidadComisionesDias: "",
+      legalidadComisionesFecha: "",
+      legalidadOtrosValoresDias: "",
+      legalidadOtrosValoresFecha: "",
+      legalidadVariosDias: "",
+      legalidadVariosFecha: "",
+      serviciosCompraVehiculo: "",
+      serviciosRepresentacionMandato: "",
+      serviciosCargosNaviero: "",
+      serviciosCargosGruas: "",
+      serviciosMultas: "",
+      anticiposCompraVehiculo: "",
+      anticiposServicios: "",
+      saldoPorCobrar: "",
+      formularioAutor: "",
+      formularioRecibidoConforme: ""
+    }
+  );
+  const [loading, setLoading] = useState(false);
+
+  const handleSend = async () => {
+    setLoading(true);
+    const copyForm: any = {...form};
+    const newForm: Record<string, string> = {};
+    for(let key in form) {
+      if(typeof copyForm[key] === "boolean") {
+        newForm[key] = copyForm[key] ? "SI" : "NO";
+      } else {
+        newForm[key] = copyForm[key] as string;
+      }
+    }
+
+    const res = await sendRequest("formulario", {
+      idUsuario: selectedUserId ? +selectedUserId : null,
+      respuestas: newForm
+    });
+    if(res) {
+      Swal.fire({
+        title: res.status === 1 ? "Éxito" : "Error",
+        icon: res.status === 1 ? "success" : "error",
+        text: res.message
+      });
+      if(res.status === 1) {
+        navigate("/dashboard/forms");
+      }
+    }
+    setLoading(false);
+  }
 
   return (
     <Form>
@@ -99,7 +164,10 @@ const Content = () => {
               defaultOption="Seleccionar cliente"
               onChange={handleChangeUser}
             >
-              {Users.map(user => <option value={user.id}>{user.nombre}</option>)}
+              {
+                clientesRes ?
+                clientesRes.data.map(user => <option key={user.id} value={user.id}>{user.nombre}</option>) : <></>
+              }
             </Select>
           </InputContainer>
         }
@@ -400,7 +468,11 @@ const Content = () => {
         </InputContainer>
       </Form.Section>
       <ButtonGuardarContainer>
-        <Button onClick={() => {}}>Enviar a revisión</Button>
+        <Button 
+          onClick={handleSend} 
+          loading={loading}
+          loadingText="Enviando..."
+        >Enviar a revisión</Button>
       </ButtonGuardarContainer>
     </Form>
   )
