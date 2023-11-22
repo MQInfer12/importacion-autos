@@ -3,20 +3,30 @@ import Button from '../../../global/components/button';
 import Input from '../../../global/components/input';
 import Select from '../../../global/components/select';
 import { useNavigate } from 'react-router-dom';
+import { TypeFilter } from '..';
 
-const Filter = () => {
+interface Props {
+  typeFilter: TypeFilter
+  setTypeFilter: React.Dispatch<React.SetStateAction<TypeFilter>>
+  filter: string
+  setFilter: React.Dispatch<React.SetStateAction<string>>
+}
+
+const Filter = ({ typeFilter, setTypeFilter, filter, setFilter }: Props) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <div>
-        <Select>
-          <option value="">Nombre</option>
-          <option value="">Fecha</option>
+        <Select value={typeFilter} onChange={e => setTypeFilter(e.target.value as TypeFilter)}>
+          <option value="nombre">Nombre</option>
+          <option value="fecha">Fecha</option>
         </Select>
         <Input 
+          type={typeFilter === "nombre" ? "text" : "date"}
           placeholder='Buscar...'
-          value=""
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
         />
       </div>
       <Button onClick={() => navigate('/dashboard/form')}>Crear</Button>

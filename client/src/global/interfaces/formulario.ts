@@ -1,3 +1,5 @@
+import { User } from "./user"
+
 export interface FormularioRes {
   id: number
   OT: string
@@ -19,6 +21,7 @@ export interface FormularioShow {
   created_at: string
   updated_at: string
   respuestas: Respuesta[]
+  usuario: User
 }
 
 export interface Respuesta {

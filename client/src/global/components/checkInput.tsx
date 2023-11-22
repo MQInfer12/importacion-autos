@@ -5,15 +5,17 @@ interface Props {
   text: string
   value: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  disabled?: boolean
 }
 
-const CheckInput = ({ text, value, onChange }: Props) => {
+const CheckInput = ({ text, value, onChange, disabled }: Props) => {
   return (
     <Container>
       <input 
         type='checkbox' 
         checked={value}
         onChange={onChange}
+        disabled={disabled}
       />
       <label>{text}</label>
     </Container>
@@ -35,5 +37,8 @@ const Container = styled.div`
   & input {
     width: 16px;
     height: 16px;
+    &:disabled {
+      background-color: ${colors.gray100};
+    }
   }
 `;

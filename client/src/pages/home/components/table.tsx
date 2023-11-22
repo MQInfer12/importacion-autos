@@ -6,12 +6,11 @@ import { TableContainer } from '../../../global/styles/components';
 
 interface Props {
   data: FormularioRes[] | undefined
-  getData: () => void
 }
 
-const Table = ({ data, getData }: Props) => {
+const Table = ({ data }: Props) => {
   const navigate = useNavigate();
-
+  
   return (
     <TableContainer>
       {
@@ -37,7 +36,6 @@ const Table = ({ data, getData }: Props) => {
                   <td>
                     <div className='buttons'>
                       <Button type="primary" onClick={() => navigate(`/dashboard/form/${formulario.id}`)}>Ver</Button>
-                      <Button type="secondary" onClick={() => {}}>Eliminar</Button>
                     </div>
                   </td>
                 </tr>

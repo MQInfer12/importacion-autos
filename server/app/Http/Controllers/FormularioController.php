@@ -12,13 +12,10 @@ class FormularioController extends Controller
     public function index()
     {
         $Formularios = Formulario::join("usuarios", "formularios.idUsuario", "=", "usuarios.id")
-            ->select("formularios.*", "usuarios.nombre as nombre_usuario")
+            ->join("respuestas", "respuestas.idFormulario", "=", "formularios.id")
+            ->select("formularios.*", "usuarios.nombre as nombre_usuario", "respuestas.dato as fecha")
+            ->where("respuestas.tipo", "=", "formularioFecha")
             ->get();
-
-        foreach ($Formularios as $Formulario) {
-            $Formulario->fecha = Carbon::parse($Formulario->created_at)->format('d/m/Y');
-            ;
-        }
 
         return response()->json([
             'status' => 1,
@@ -69,7 +66,7 @@ class FormularioController extends Controller
     }
     public function show($id)
     {
-        $Formulario = Formulario::with("respuestas")->find($id);
+        $Formulario = Formulario::with("respuestas")->with("usuario")->find($id);
         if ($Formulario) {
             return response()->json([
                 'status' => 1,
