@@ -27,6 +27,7 @@ export default Input
 const StyledInput = styled.input`
   padding: 10px 20px;
   width: 288px;
+  max-width: 100%;
   outline: none;
   border: ${mixins.border1};
   box-shadow: ${mixins.shadow100};

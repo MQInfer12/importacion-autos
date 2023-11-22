@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { TableContainer } from '../../../global/styles/components';
+import { colors } from '../../../global/styles/colors';
 
 interface Props {
   data: User[] | undefined
@@ -15,6 +16,21 @@ interface Props {
 const Table = ({ data, getData }: Props) => {
   const [loading, setLoading] = useState<null | number>(null);
   const navigate  = useNavigate();
+
+  const sureDelete = async (id: number) => {
+    Swal.fire({
+      icon: "warning",
+      title: "¿Estás seguro?",
+      text: "Se eliminará el usuario permanentemente",
+      showDenyButton: true,
+      confirmButtonText: "Confirmar",
+      confirmButtonColor: colors.gray500
+    }).then(result => {
+      if(result.isConfirmed) {
+        handleDelete(id);
+      }
+    })
+  }
 
   const handleDelete = async (id: number) => {
     setLoading(id);
@@ -59,7 +75,7 @@ const Table = ({ data, getData }: Props) => {
                       >Editar</Button>
                       <Button 
                         type="secondary" 
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => sureDelete(user.id)}
                         loading={loading === user.id}
                       >Eliminar</Button>
                     </div>
