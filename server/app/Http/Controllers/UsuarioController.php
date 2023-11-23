@@ -117,14 +117,14 @@ class UsuarioController extends Controller
         $user = Usuario::where("correo", "=", $request->correo)->first();
         if (isset($user->id)) {
             if (Hash::check($request->password, $user->password)) {
-                $userData = DB::select("select correo,rol,nombre from usuarios where correo = '$request->correo'");
+                $userData=$user;
                 $token = $user->createToken("auth_token")->plainTextToken;
                 return response()->json([
                     "status" => 1,
                     "message" => "Inicio de sesión correcto",
                     "data" => [
                         "access_token" => $token,
-                        "user" => $userData[0],
+                        "user" => $userData,
                     ]
                 ]);
             } else {
