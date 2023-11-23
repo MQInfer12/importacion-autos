@@ -1,11 +1,15 @@
 import styled from "styled-components"
 import { colors } from "../styles/colors";
 
-const Loading = () => {
+interface Props {
+  text?: string
+}
+
+const Loading = ({ text }: Props) => {
   return (
     <Container>
       <div className="loader" />
-      <p>Cargando...</p>
+      <p>{text || "Cargando..."}</p>
     </Container>
   )
 }

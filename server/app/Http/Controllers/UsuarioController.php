@@ -146,7 +146,7 @@ class UsuarioController extends Controller
         auth()->user()->tokens()->delete();
         return response()->json([
             "status" => 0,
-            "message" => "Cierre de seccion",
+            "message" => "Cierre de sesión correcto",
         ]);
     }
     public function usuarioPerfil()

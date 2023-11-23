@@ -1,24 +1,70 @@
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
 import Button from './button';
 /* import ProfilePic from '../../assets/profile.png'; */
 import { mixins } from '../styles/mixins';
 import { useEffect, useState } from 'react';
+import { sendRequest } from '../../utilities/sendRequest';
+import Swal from 'sweetalert2';
+import { useUser } from '../../store/user';
+import Loading from './loading';
+import { useGet } from '../../hooks/useGet';
+import { User } from '../interfaces/user';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { state, logout, setUser } = useUser();
+  const { res: userRes } = useGet<User>("me", state === "loading");
 
-  const handleLogout = () => {
-    navigate('/');
+  const handleLogout = async () => {
+    /* COMPROBAMOS TOKEN EN COOKIE */
+    const token = document.cookie.replace("token=", "");
+    if(!token) {
+      navigate("/");
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No autorizado"
+      });
+    }
+
+    /* ENVIAMOS LOGOUT */
+    const res = await sendRequest("logout", null, {
+      method: "GET"
+    });
+    if(res) {
+      if(res.message !== "Unauthenticated.") {
+        Swal.fire({
+          icon: "success",
+          title: "Éxito",
+          text: res.message
+        });
+      }
+    }
+    document.cookie = `token=; max-age=0`;
+    logout();
+    navigate("/");
   }
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if(userRes) {
+      setUser(userRes.data);
+    }
+  }, [userRes]);
+
+  if(state === "loading") return (
+    <Fullscreen>
+      <Loading text="Cargando datos del usuario..." />
+    </Fullscreen>
+  )
+  if(state === "unlogged") return <Navigate to="/" />
   return (
     <>
     <Nav>
@@ -47,6 +93,11 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+const Fullscreen = styled.div`
+  width: 100vw;
+  height: 100dvh;
+`;
 
 const Nav = styled.div`
   width: 100%;
