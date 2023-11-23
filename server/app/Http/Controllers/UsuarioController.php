@@ -121,7 +121,7 @@ class UsuarioController extends Controller
                 $token = $user->createToken("auth_token")->plainTextToken;
                 return response()->json([
                     "status" => 1,
-                    "msg" => "Usuario logeado",
+                    "message" => "Inicio de sesión correcto",
                     "data" => [
                         "access_token" => $token,
                         "user" => $userData[0],
@@ -130,7 +130,7 @@ class UsuarioController extends Controller
             } else {
                 return response()->json([
                     "status" => 3,
-                    "message" => "Contraseña incorrecto",
+                    "message" => "Contraseña incorrecta",
                 ], 404);
             }
         } else {
