@@ -122,8 +122,10 @@ class UsuarioController extends Controller
                 return response()->json([
                     "status" => 1,
                     "msg" => "Usuario logeado",
-                    "access_token" => $token,
-                    "user" => $userData,
+                    "data" => [
+                        "access_token" => $token,
+                        "user" => $userData[0],
+                    ]
                 ]);
             } else {
                 return response()->json([
@@ -138,31 +140,6 @@ class UsuarioController extends Controller
             ], 404);
         }
         ;
-    }
-
-    public function logina(Request $request)
-    {
-        $credentials = $request->only('correo', 'password');
-        if (auth()->attempt($credentials)) {
-            return response()->json([
-                'status' => 0,
-                'msg' => 'correo encontrado',
-            ], 401);
-            /*  $user = auth()->user();
-             $token = $user->createToken('auth_token')->accessToken;
-             $cookie = Cookie::make('auth_cookie', $token, config('auth.expires_in_minutes'));
-
-             return response()->json([
-                 'status' => 1,
-                 'msg' => 'Usuario logeado',
-                 'user' => $user,
-             ])->withCookie($cookie); */
-        }
-
-        return response()->json([
-            'status' => 0,
-            'msg' => 'Credenciales incorrectas',
-        ], 401);
     }
     public function Logout()
     {

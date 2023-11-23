@@ -15,6 +15,10 @@ use App\Http\Controllers\RespuestaController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['middleware' => ["auth:sanctum"]], function () {
+    Route::get('me', [UsuarioController::class, 'usuarioPerfil']);
+    Route::get('logout', [UsuarioController::class, 'logout']);
+});
 
 
 Route::post('/registro', [UsuarioController::class, 'registro']);
