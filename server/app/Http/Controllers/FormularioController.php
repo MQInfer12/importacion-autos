@@ -11,12 +11,15 @@ class FormularioController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $Formularios = Formulario::join("usuarios", "formularios.idUsuario", "=", "usuarios.id")
             ->join("respuestas", "respuestas.idFormulario", "=", "formularios.id")
             ->select("formularios.*", "usuarios.nombre as nombre_usuario", "respuestas.dato as fecha")
-            ->where("respuestas.tipo", "=", "formularioFecha")
-            ->get();
-
+            ->where("respuestas.tipo", "=", "formularioFecha");
+        if ($user->rol == 'Cliente') {
+            $Formularios->where("formularios.idUsuario", "=", $user->id);
+        }
+        $Formularios = $Formularios->get();
         return response()->json([
             'status' => 1,
             'message' => 'Formularios recuperados correctamente',
