@@ -19,7 +19,7 @@ class FormularioController extends Controller
         if ($user->rol == 'Cliente') {
             $Formularios->where("formularios.idUsuario", "=", $user->id);
         }
-        $Formularios = $Formularios->get();
+        $Formularios = $Formularios->orderBy('created_at', 'desc')->get();
         return response()->json([
             'status' => 1,
             'message' => 'Formularios recuperados correctamente',
@@ -45,6 +45,7 @@ class FormularioController extends Controller
         $Formulario->save();
         $year = date('Y');
         $Formulario->OT = $Formulario->id . "-" . $year;
+        $Formulario->save();
 
         //CREAR LAS RESPUESTAS DEL FORMULARIO
         $respuestas = $request->respuestas;
@@ -69,12 +70,20 @@ class FormularioController extends Controller
     }
     public function show($id)
     {
+        $User = auth()->user();
         $Formulario = Formulario::with("respuestas")->with("usuario")->find($id);
         if ($Formulario) {
+            if($User->rol === "Admin" || $Formulario->idUsuario == $User->id) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Formulario encontrado",
+                    "data" => $Formulario
+                ]);
+            }
             return response()->json([
-                'status' => 1,
-                'message' => "Formulario encontrado",
-                "data" => $Formulario
+                'status' => 3,
+                'message' => "No tienes permisos para ver esto",
+                "data" => null
             ]);
         } else {
             return response()->json([
@@ -83,6 +92,7 @@ class FormularioController extends Controller
             ]);
         }
     }
+
     public function update(Request $request, $id)
     {
         $Formulario = Formulario::find($id);
@@ -95,6 +105,7 @@ class FormularioController extends Controller
             'data' => $Formulario
         ]);
     }
+
     public function destroy($id)
     {
         $Formulario = Formulario::destroy($id);
@@ -102,6 +113,47 @@ class FormularioController extends Controller
             "status" => 1,
             "message" => "Formulario eliminado correctamente",
             "data" => $Formulario
+        ]);
+    }
+
+    public function sign($idForm) 
+    {
+        $Formulario = Formulario::find($idForm);
+        $User = auth()->user();
+        if($Formulario->idUsuario == $User->id) {
+            $Formulario->estado = "Firmado";
+            $Formulario->save();
+            return response()->json([
+                "status" => 1,
+                "message" => "Formulario firmado correctamente",
+                "data" => $Formulario
+            ]);
+        }
+        return response()->json([
+            "status" => 2,
+            "message" => "No tienes permisos para hacer esto",
+            "data" => null
+        ]);
+    }
+
+    public function decline(Request $request, $idForm)
+    {
+        $Formulario = Formulario::find($idForm);
+        $User = auth()->user();
+        if($Formulario->idUsuario == $User->id) {
+            $Formulario->observacion = $request->observacion;
+            $Formulario->estado = "Declinado";
+            $Formulario->save();
+            return response()->json([
+                "status" => 1,
+                "message" => "Se declinó el formulario y la observación fué enviada",
+                "data" => $Formulario
+            ]);
+        }
+        return response()->json([
+            "status" => 2,
+            "message" => "No tienes permisos para hacer esto",
+            "data" => null
         ]);
     }
 }

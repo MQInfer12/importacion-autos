@@ -24,10 +24,15 @@ export const Container = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    & > h2 {
+    & > section {
+      flex: 1;
+      min-width: 0;
+    }
+    & h2 {
       color: ${colors.gray500};
       white-space: nowrap;
       text-overflow: ellipsis;
+      overflow: hidden;
     }
     & > div {
       display: flex;
@@ -108,7 +113,7 @@ export const TableContainer = styled.div`
         width: 200px;
       }
       &.medium {
-        width: 120px;
+        width: 140px;
       }
       &.extrabig {
         width: 240px;

@@ -14,12 +14,14 @@ import { useGet } from "../../../hooks/useGet"
 import { useNavigate } from "react-router-dom"
 import { FormularioShow } from "../../../global/interfaces/formulario"
 import { useUser } from "../../../store/user"
+import { colors } from "../../../global/styles/colors"
 
 interface Props {
   formulario?: FormularioShow
+  observacion: string | null
 }
 
-const Content = ({ formulario }: Props) => {
+const Content = ({ formulario, observacion }: Props) => {
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -104,6 +106,21 @@ const Content = ({ formulario }: Props) => {
   );
   const [loading, setLoading] = useState(false);
 
+  const sureSend = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "¿Continuar?",
+      text: "Enviarás este formulario para que el mandante lo revise",
+      showDenyButton: true,
+      confirmButtonText: "Confirmar",
+      confirmButtonColor: colors.gray500
+    }).then(result => {
+      if(result.isConfirmed) {
+        handleSend();
+      }
+    });
+  }
+
   const handleSend = async () => {
     setLoading(true);
     const copyForm: any = {...form};
@@ -115,7 +132,6 @@ const Content = ({ formulario }: Props) => {
         newForm[key] = copyForm[key] as string;
       }
     }
-
     const res = await sendRequest("formulario", {
       idUsuario: selectedUserId ? +selectedUserId : null,
       respuestas: newForm
@@ -135,31 +151,37 @@ const Content = ({ formulario }: Props) => {
 
   return (
     <Form>
+      {
+        observacion ?
+        <Form.Section text="Observación del mandante">
+          <Text>{observacion}</Text>
+        </Form.Section> : <></>
+      }
       <Form.Section text="Datos de la importadora">
         <InputContainer text="Nombre de empresa">
           <Input 
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
             value={form.importadoraNombre}
             onChange={e => setForm(old => ({...old, importadoraNombre: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="Encargado">
           <Input 
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
             value={form.importadoraEncargado}
             onChange={e => setForm(old => ({...old, importadoraEncargado: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="RUT No.">
           <Input 
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
             value={form.importadoraRUT}
             onChange={e => setForm(old => ({...old, importadoraRUT: e.target.value }))}
           />
         </InputContainer>
         <InputContainer text="Dirección">
           <Input 
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
             value={form.importadoraDireccion}
             onChange={e => setForm(old => ({...old, importadoraDireccion: e.target.value }))}
           />
@@ -224,21 +246,21 @@ const Content = ({ formulario }: Props) => {
             value={form.formularioFecha}
             onChange={e => setForm(old => ({...old, formularioFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Ciudad">
           <Input 
             value={form.formularioCiudad}
             onChange={e => setForm(old => ({...old, formularioCiudad: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="País">
           <Input 
             value={form.formularioPais}
             onChange={e => setForm(old => ({...old, formularioPais: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -247,42 +269,42 @@ const Content = ({ formulario }: Props) => {
           <Input 
             value={form.vehiculoMarca}
             onChange={e => setForm(old => ({...old, vehiculoMarca: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Modelo">
           <Input 
             value={form.vehiculoModelo}
             onChange={e => setForm(old => ({...old, vehiculoModelo: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Año">
           <Input 
             value={form.vehiculoYear}
             onChange={e => setForm(old => ({...old, vehiculoYear: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="VIN">
           <Input 
             value={form.vehiculoVIN}
             onChange={e => setForm(old => ({...old, vehiculoVIN: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="OBS.">
           <Input 
             value={form.vehiculoOBS}
             onChange={e => setForm(old => ({...old, vehiculoOBS: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Otros">
           <Input 
             value={form.vehiculoOtros}
             onChange={e => setForm(old => ({...old, vehiculoOtros: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -291,31 +313,31 @@ const Content = ({ formulario }: Props) => {
           text="Invoice"
           value={form.documentoInvoice}
           onChange={e => setForm(old => ({...old, documentoInvoice: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Swift bancario"
           value={form.documentoSwift}
           onChange={e => setForm(old => ({...old, documentoSwift: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Central dispach"
           value={form.documentoDispach}
           onChange={e => setForm(old => ({...old, documentoDispach: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="BL."
           value={form.documentoBL}
           onChange={e => setForm(old => ({...old, documentoBL: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Otros"
           value={form.documentoOtros}
           onChange={e => setForm(old => ({...old, documentoOtros: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
       </Form.Section>
       <Form.Section text="Formas de pago">
@@ -323,25 +345,25 @@ const Content = ({ formulario }: Props) => {
           text="Transferencia bancaria"
           value={form.pagoTransferencia}
           onChange={e => setForm(old => ({...old, pagoTransferencia: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Depósito directo"
           value={form.pagoDeposito}
           onChange={e => setForm(old => ({...old, pagoDeposito: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Cobro por caja sala VTA. BOL"
           value={form.pagoCobro}
           onChange={e => setForm(old => ({...old, pagoCobro: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
         <CheckInput 
           text="Otros"
           value={form.pagoOtros}
           onChange={e => setForm(old => ({...old, pagoOtros: e.target.checked }))}
-          disabled={!!formulario}
+          disabled={!!formulario && !observacion}
         />
       </Form.Section>
       <Form.Section text="Legalidad (días, vencimiento)">
@@ -351,13 +373,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadVINDias}
             onChange={e => setForm(old => ({...old, legalidadVINDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadVINFecha}
             onChange={e => setForm(old => ({...old, legalidadVINFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Compra internacional">
@@ -366,13 +388,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadCompraInternacionalDias}
             onChange={e => setForm(old => ({...old, legalidadCompraInternacionalDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadCompraInternacionalFecha}
             onChange={e => setForm(old => ({...old, legalidadCompraInternacionalFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Otros servicios">
@@ -381,13 +403,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadOtrosServiciosDias}
             onChange={e => setForm(old => ({...old, legalidadOtrosServiciosDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadOtrosServiciosFecha}
             onChange={e => setForm(old => ({...old, legalidadOtrosServiciosFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Comisiones varias">
@@ -396,13 +418,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadComisionesDias}
             onChange={e => setForm(old => ({...old, legalidadComisionesDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadComisionesFecha}
             onChange={e => setForm(old => ({...old, legalidadComisionesFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Otros valores">
@@ -411,13 +433,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadOtrosValoresDias}
             onChange={e => setForm(old => ({...old, legalidadOtrosValoresDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadOtrosValoresFecha}
             onChange={e => setForm(old => ({...old, legalidadOtrosValoresFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Varios">
@@ -426,13 +448,13 @@ const Content = ({ formulario }: Props) => {
             value={form.legalidadVariosDias}
             onChange={e => setForm(old => ({...old, legalidadVariosDias: e.target.value }))}
             placeholder="Días"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
           <Input 
             value={form.legalidadVariosFecha}
             onChange={e => setForm(old => ({...old, legalidadVariosFecha: e.target.value }))}
             type="date"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -442,7 +464,7 @@ const Content = ({ formulario }: Props) => {
             value={form.serviciosCompraVehiculo}
             onChange={e => setForm(old => ({...old, serviciosCompraVehiculo: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Serv. de representación con mandato">
@@ -450,7 +472,7 @@ const Content = ({ formulario }: Props) => {
             value={form.serviciosRepresentacionMandato}
             onChange={e => setForm(old => ({...old, serviciosRepresentacionMandato: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Serv. cargos por flete naviero">
@@ -458,7 +480,7 @@ const Content = ({ formulario }: Props) => {
             value={form.serviciosCargosNaviero}
             onChange={e => setForm(old => ({...old, serviciosCargosNaviero: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Serv. cargos por servicios grúas">
@@ -466,7 +488,7 @@ const Content = ({ formulario }: Props) => {
             value={form.serviciosCargosGruas}
             onChange={e => setForm(old => ({...old, serviciosCargosGruas: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Cargos por servicios de multas">
@@ -474,7 +496,7 @@ const Content = ({ formulario }: Props) => {
             value={form.serviciosMultas}
             onChange={e => setForm(old => ({...old, serviciosMultas: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -484,7 +506,7 @@ const Content = ({ formulario }: Props) => {
             value={form.anticiposCompraVehiculo}
             onChange={e => setForm(old => ({...old, anticiposCompraVehiculo: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Servicios logísticos">
@@ -492,7 +514,7 @@ const Content = ({ formulario }: Props) => {
             value={form.anticiposServicios}
             onChange={e => setForm(old => ({...old, anticiposServicios: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -502,7 +524,7 @@ const Content = ({ formulario }: Props) => {
             value={form.saldoPorCobrar}
             onChange={e => setForm(old => ({...old, saldoPorCobrar: e.target.value }))}
             type="number"
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
@@ -511,25 +533,27 @@ const Content = ({ formulario }: Props) => {
           <Input 
             value={form.formularioAutor}
             onChange={e => setForm(old => ({...old, formularioAutor: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
         <InputContainer text="Recibido conforme por">
           <Input 
             value={form.formularioRecibidoConforme}
             onChange={e => setForm(old => ({...old, formularioRecibidoConforme: e.target.value }))}
-            disabled={!!formulario}
+            disabled={!!formulario && !observacion}
           />
         </InputContainer>
       </Form.Section>
       <ButtonGuardarContainer>
         {
-          (user?.rol === "Admin" && !formulario) &&
+          ((user?.rol === "Admin" && !formulario) || !!observacion) &&
           <Button 
-            onClick={handleSend} 
+            onClick={sureSend} 
             loading={loading}
             loadingText="Enviando..."
-          >Enviar a revisión</Button>
+          >
+            {!!observacion ? "Volver a enviar" : "Enviar a revisión"}
+          </Button>
         }
       </ButtonGuardarContainer>
     </Form>
@@ -543,4 +567,8 @@ const ButtonGuardarContainer = styled.div`
   margin-top: 24px;
   display: flex;
   gap: 12px;
+`;
+
+const Text = styled.p`
+  color: ${colors.gray300};
 `;

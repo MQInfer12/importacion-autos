@@ -1,9 +1,11 @@
 import { User } from "./user"
 
+export type EstadoFormulario = "Nuevo" | "Firmado" | "Declinado"
+
 export interface FormularioRes {
   id: number
   OT: string
-  estado: "Nuevo" | "Firmado" | "Declinado"
+  estado: EstadoFormulario
   observacion: string | null
   idUsuario: number
   created_at: string
@@ -15,7 +17,7 @@ export interface FormularioRes {
 export interface FormularioShow {
   id: number
   OT: string
-  estado: "Nuevo" | "Firmado" | "Declinado"
+  estado: EstadoFormulario
   observacion: string | null
   idUsuario: number
   created_at: string

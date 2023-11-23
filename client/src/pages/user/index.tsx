@@ -5,11 +5,15 @@ import Table from "./components/table"
 import { useState } from 'react'
 import { filterBy } from "../../utilities/filterBy"
 import { Container } from "../../global/styles/components"
+import { useUser } from "../../store/user"
+import { Navigate } from "react-router-dom"
 
 const UserPage = () => {
   const { res, getData } = useGet<User[]>("usuario");
   const [filter, setFilter] = useState("");
+  const { user } = useUser();
 
+  if(user?.rol !== "Admin") return <Navigate to="/dashboard/forms" />
   return (
     <Container>
       <h2>Usuarios</h2>

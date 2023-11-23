@@ -15,11 +15,13 @@ import { User } from '../interfaces/user';
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { pathname } = useLocation();
   const { user, state, logout, setUser } = useUser();
   const { res: userRes } = useGet<User>("me", state === "loading");
 
   const handleLogout = async () => {
+    setLoading(true);
     /* COMPROBAMOS TOKEN EN COOKIE */
     const token = document.cookie.replace("token=", "");
     if(!token) {
@@ -47,6 +49,7 @@ const Navbar = () => {
     document.cookie = `token=; max-age=0`;
     logout();
     navigate("/");
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -85,7 +88,10 @@ const Navbar = () => {
       <RightContainer>
         {/* <p>Bienvenido</p>
         <img src={ProfilePic} alt="profile" /> */}
-        <Button onClick={handleLogout}>Cerrar sesión</Button>
+        <Button 
+          onClick={handleLogout} 
+          loading={loading}
+        >Cerrar sesión</Button>
       </RightContainer>
     </Nav>
     <Main>

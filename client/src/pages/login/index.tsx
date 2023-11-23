@@ -16,9 +16,11 @@ const Login = () => {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useUser();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    setLoading(true);
     const res = await sendRequest<LoginRes>("login", {
       correo, password
     });
@@ -46,6 +48,7 @@ const Login = () => {
         });
       }
     }
+    setLoading(false);
   }
 
   return (
@@ -68,7 +71,7 @@ const Login = () => {
             onChange={e => setPassword(e.target.value)}
           />
         </InputContainer>
-        <Button onClick={handleLogin}>Ingresar</Button>
+        <Button onClick={handleLogin} loading={loading}>Ingresar</Button>
       </Form>
     </Container>
   )

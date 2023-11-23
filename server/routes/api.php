@@ -34,6 +34,8 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('/formulario/{id}', [FormularioController::class, 'show']);
     Route::put('/formulario/{id}', [FormularioController::class, 'update']);
     Route::delete('/formulario/{id}', [FormularioController::class, 'destroy']);
+    Route::patch('/sign/{idForm}', [FormularioController::class, 'sign']);
+    Route::patch('/decline/{idForm}', [FormularioController::class, 'decline']);
     
     Route::post('/respuesta', [RespuestaController::class, 'store']);
     Route::get('/respuesta', [RespuestaController::class, 'index']);

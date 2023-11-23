@@ -22,8 +22,10 @@ const Content = () => {
     nacionalidad: user?.nacionalidad || "",
     profesion: user?.profesion || ""
   });
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("correo", form.correo);
     formData.append("nombre", form.nombre);
@@ -52,6 +54,7 @@ const Content = () => {
         });
       }
     }
+    setLoading(false);
   }
 
   return (
@@ -69,39 +72,47 @@ const Content = () => {
             onChange={e => setForm(old => ({...old, nombre: e.target.value }))}
           />
         </InputContainer>
-        <InputContainer text="RUT">
-          <Input 
-            value={form.RUT}
-            onChange={e => setForm(old => ({...old, RUT: e.target.value }))}
-          />
-        </InputContainer>
-        <InputContainer text="Domicilio">
-          <Input 
-            value={form.domicilio}
-            onChange={e => setForm(old => ({...old, domicilio: e.target.value }))}
-          />
-        </InputContainer>
-        <InputContainer text="Nacionalidad">
-          <Input 
-            value={form.nacionalidad}
-            onChange={e => setForm(old => ({...old, nacionalidad: e.target.value }))}
-          />
-        </InputContainer>
-        <InputContainer text="Profesión">
-          <Input 
-            value={form.profesion}
-            onChange={e => setForm(old => ({...old, profesion: e.target.value }))}
-          />
-        </InputContainer>
+        {
+          user?.rol === "Cliente" ?
+          <>
+          <InputContainer text="RUT">
+            <Input 
+              value={form.RUT}
+              onChange={e => setForm(old => ({...old, RUT: e.target.value }))}
+            />
+          </InputContainer>
+          <InputContainer text="Domicilio">
+            <Input 
+              value={form.domicilio}
+              onChange={e => setForm(old => ({...old, domicilio: e.target.value }))}
+            />
+          </InputContainer>
+          <InputContainer text="Nacionalidad">
+            <Input 
+              value={form.nacionalidad}
+              onChange={e => setForm(old => ({...old, nacionalidad: e.target.value }))}
+            />
+          </InputContainer>
+          <InputContainer text="Profesión">
+            <Input 
+              value={form.profesion}
+              onChange={e => setForm(old => ({...old, profesion: e.target.value }))}
+            />
+          </InputContainer>
+          </> : <></>
+        }
       </Form.Section>
-      <Form.Section text="Firma">
-        <FileInput 
-          defaultSrc={user?.firma ? `${http.replace("api/", "")}storage/${user.firma}?${new Date().getTime()}` : undefined}
-          state={signatureState}
-        />
-      </Form.Section>
+      {
+        user?.rol === "Cliente" ?
+        <Form.Section text="Firma">
+          <FileInput 
+            defaultSrc={user?.firma ? `${http.replace("api/", "")}storage/${user.firma}?${new Date().getTime()}` : undefined}
+            state={signatureState}
+          />
+        </Form.Section> : <></>
+      }
       <ButtonGuardarContainer>
-        <Button onClick={handleSend}>Guardar</Button>
+        <Button onClick={handleSend} loading={loading} loadingText="Guardando...">Guardar</Button>
       </ButtonGuardarContainer>
     </Form>
   )

@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { TableContainer } from '../../../global/styles/components';
 import { colors } from '../../../global/styles/colors';
+import { useUser } from '../../../store/user';
 
 interface Props {
   data: User[] | undefined
@@ -15,13 +16,14 @@ interface Props {
 
 const Table = ({ data, getData }: Props) => {
   const [loading, setLoading] = useState<null | number>(null);
+  const { user: myUser } = useUser();
   const navigate  = useNavigate();
 
   const sureDelete = async (id: number) => {
     Swal.fire({
       icon: "warning",
       title: "¿Estás seguro?",
-      text: "Se eliminará el usuario permanentemente",
+      text: "Se eliminará el usuario y sus datos permanentemente",
       showDenyButton: true,
       confirmButtonText: "Confirmar",
       confirmButtonColor: colors.gray500
@@ -72,11 +74,13 @@ const Table = ({ data, getData }: Props) => {
                     <div className='buttons'>
                       <Button 
                         onClick={() => navigate(`/dashboard/userForm/${user.id}`)}
+                        disabled={user.id === myUser?.id}
                       >Editar</Button>
                       <Button 
                         type="secondary" 
                         onClick={() => sureDelete(user.id)}
                         loading={loading === user.id}
+                        disabled={user.id === myUser?.id}
                       >Eliminar</Button>
                     </div>
                   </td>

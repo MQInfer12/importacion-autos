@@ -16,10 +16,11 @@ const Filter = ({ typeFilter, setTypeFilter, filter, setFilter }: Props) => {
       <div>
         <Select value={typeFilter} onChange={e => setTypeFilter(e.target.value as TypeFilter)}>
           <option value="nombre">Nombre</option>
+          <option value="OT">OT</option>
           <option value="fecha">Fecha</option>
         </Select>
         <Input 
-          type={typeFilter === "nombre" ? "text" : "date"}
+          type={typeFilter === "fecha" ? "date" : "text"}
           placeholder='Buscar...'
           value={filter}
           onChange={e => setFilter(e.target.value)}

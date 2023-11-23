@@ -18,6 +18,7 @@ const Table = ({ data }: Props) => {
         <table>
           <thead>
             <tr>
+              <th className='medium'>OT</th>
               <th className='big'>Nombre del cliente</th>
               <th className='medium'>Fecha</th>
               <th className='medium'>Estado</th>
@@ -28,6 +29,7 @@ const Table = ({ data }: Props) => {
             {
               data.map(formulario => (
                 <tr key={formulario.id}>
+                  <td>{formulario.OT}</td>
                   <td>{formulario.nombre_usuario}</td>
                   <td>{formulario.fecha}</td>
                   <td>
