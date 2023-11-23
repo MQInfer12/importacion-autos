@@ -129,13 +129,13 @@ class UsuarioController extends Controller
                 ]);
             } else {
                 return response()->json([
-                    "status" => 0,
-                    "meesage" => "Contraseña incorrecto",
+                    "status" => 3,
+                    "message" => "Contraseña incorrecto",
                 ], 404);
             }
         } else {
             return response()->json([
-                "status" => 0,
+                "status" => 2,
                 "message" => "Correo no registrado",
             ], 404);
         }
