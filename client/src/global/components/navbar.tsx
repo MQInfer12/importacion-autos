@@ -16,7 +16,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  const { state, logout, setUser } = useUser();
+  const { user, state, logout, setUser } = useUser();
   const { res: userRes } = useGet<User>("me", state === "loading");
 
   const handleLogout = async () => {
@@ -75,7 +75,10 @@ const Navbar = () => {
         <h1>Importaciones</h1>
         <div>
           <StyledNavLink to='/dashboard/forms'>Formularios</StyledNavLink>
-          <StyledNavLink to='/dashboard/user'>Usuarios</StyledNavLink>
+          {
+            user?.rol === "Admin" &&
+            <StyledNavLink to='/dashboard/user'>Usuarios</StyledNavLink>
+          }
           <StyledNavLink to='/dashboard/profile'>Perfil</StyledNavLink>
         </div>
       </LeftContainer>

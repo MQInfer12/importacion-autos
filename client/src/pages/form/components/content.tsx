@@ -13,6 +13,7 @@ import { Formulario } from "../interfaces/formulario"
 import { useGet } from "../../../hooks/useGet"
 import { useNavigate } from "react-router-dom"
 import { FormularioShow } from "../../../global/interfaces/formulario"
+import { useUser } from "../../../store/user"
 
 interface Props {
   formulario?: FormularioShow
@@ -20,6 +21,7 @@ interface Props {
 
 const Content = ({ formulario }: Props) => {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const { res: clientesRes } = useGet<User[]>("cliente", !formulario);
 
@@ -521,11 +523,14 @@ const Content = ({ formulario }: Props) => {
         </InputContainer>
       </Form.Section>
       <ButtonGuardarContainer>
-        <Button 
-          onClick={handleSend} 
-          loading={loading}
-          loadingText="Enviando..."
-        >Enviar a revisión</Button>
+        {
+          (user?.rol === "Admin" && !formulario) &&
+          <Button 
+            onClick={handleSend} 
+            loading={loading}
+            loadingText="Enviando..."
+          >Enviar a revisión</Button>
+        }
       </ButtonGuardarContainer>
     </Form>
   )
@@ -536,4 +541,6 @@ export default Content
 const ButtonGuardarContainer = styled.div`
   align-self: flex-end;
   margin-top: 24px;
+  display: flex;
+  gap: 12px;
 `;

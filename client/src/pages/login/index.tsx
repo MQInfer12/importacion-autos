@@ -63,6 +63,7 @@ const Login = () => {
         </InputContainer>
         <InputContainer text='Contraseña'>
           <Input 
+            type='password'
             value={password}
             onChange={e => setPassword(e.target.value)}
           />

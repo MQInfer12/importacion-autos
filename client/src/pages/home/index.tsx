@@ -5,6 +5,9 @@ import { useGet } from "../../hooks/useGet"
 import Filter from "./components/filter"
 import Table from "./components/table"
 import { filterBy } from "../../utilities/filterBy"
+import { useUser } from "../../store/user"
+import Button from "../../global/components/button"
+import { useNavigate } from "react-router-dom"
 
 export type TypeFilter = "nombre" | "fecha"
 
@@ -12,6 +15,8 @@ const Home = () => {
   const { res } = useGet<FormularioRes[]>("formulario")
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("nombre");
   const [filter, setFilter] = useState("");
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFilter("");
@@ -19,7 +24,15 @@ const Home = () => {
   
   return (
     <Container>
-      <h2>Formularios</h2>
+      <header>
+        <h2>Formularios</h2>
+        <div>
+        {
+          user?.rol === "Admin" &&
+          <Button onClick={() => navigate('/dashboard/form')}>Crear</Button>
+        }
+        </div>
+      </header>
       <div>
         <Filter 
           typeFilter={typeFilter} 

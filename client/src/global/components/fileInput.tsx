@@ -5,13 +5,14 @@ import { mixins } from '../styles/mixins'
 import { useEffect, useId, useState } from 'react'
 
 interface Props {
+  defaultSrc?: string,
   state: [
     null | File, 
     React.Dispatch<React.SetStateAction<File | null>>
   ]
 }
 
-const FileInput = ({ state }: Props) => {
+const FileInput = ({ defaultSrc, state }: Props) => {
   const [value, setValue] = state;
   const [preview, setPreview] = useState<null | string>(null);
   const id = useId();
@@ -34,7 +35,12 @@ const FileInput = ({ state }: Props) => {
 
   return (
     <Container>
-      <img src={preview || Placeholder} alt="placeholder" />
+      <img 
+        style={{
+          backgroundImage: `url(${Placeholder})`
+        }}
+        src={preview || defaultSrc} 
+      />
       <label htmlFor={id}>
         <Button 
           onClick={() => {}}
@@ -60,6 +66,8 @@ const Container = styled.div`
     object-fit: cover;
     border-radius: 8px;
     border: ${mixins.border1};
+    background-position: center;
+    background-size: cover;
   }
   & > input {
     display: none;

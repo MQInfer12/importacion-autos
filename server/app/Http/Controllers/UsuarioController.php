@@ -81,7 +81,16 @@ class UsuarioController extends Controller
     }
     public function actualizarFirma(Request $request)
     {
-        $User = auth()->user();
+        $request->validate([
+            'nombre' => 'required',
+            'correo' => 'required'
+        ], [
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'correo.required' => 'El campo correo es obligatorio.',
+        ]);
+
+        $Logged = auth()->user();
+        $User = Usuario::find($Logged->id);
         $User->nombre = $request->nombre;
         $User->correo = $request->correo;
         $User->RUT = $request->RUT;
@@ -89,7 +98,7 @@ class UsuarioController extends Controller
         $User->nacionalidad = $request->nacionalidad;
         $User->profesion = $request->profesion;
         if ($request->file("firma") != null) {
-            $request->file("firma")->storeAs("/", $User->id . ".jpg");
+            $request->file("firma")->storeAs("/public", $User->id . ".jpg");
             $User->firma = $User->id . ".jpg";
         }
         $User->save();

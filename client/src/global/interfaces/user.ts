@@ -8,5 +8,5 @@ export interface User {
   domicilio: string
   nacionalidad: string
   profesion: string
-  firma: any
+  firma: string | null
 }

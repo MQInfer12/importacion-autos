@@ -15,7 +15,31 @@ export const Container = styled.div`
     padding: 44px 24px;
   }
 
+  & > header {
+    align-self: flex-start;
+    height: 43px;
+    margin-left: 10%;
+    width: calc(100% - 20%);
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    & > h2 {
+      color: ${colors.gray500};
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    & > div {
+      display: flex;
+      gap: 12px;
+    }
+    @media screen and (max-width: 640px) {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
   & > h2 {
+    height: 43px;
     margin-left: 10%;
     align-self: flex-start;
     color: ${colors.gray500};
@@ -32,7 +56,7 @@ export const Container = styled.div`
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 60px);
+    height: calc(100% - 67px);
     
     @media screen and (max-width: 640px) {
       width: 100%;

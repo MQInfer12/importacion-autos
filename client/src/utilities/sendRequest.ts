@@ -16,15 +16,27 @@ export const sendRequest = async <T,>(route: string, body: Record<string, any> |
     method: options?.method || "POST",
   }
   const token = document.cookie.replace("token=", "");
-  const res = await fetch(`${http}${route}`, {
-    method: thisOptions.method,
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": token ? `Bearer ${token}` : ""
-    },
-    body: thisOptions.method !== "GET" ? JSON.stringify(body || {}) : undefined
-  });
+  let res: any;
+  if(body instanceof FormData) {
+    res = await fetch(`${http}${route}`, {
+      method: thisOptions.method,
+      headers: {
+        "Accept": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body
+    });
+  } else {
+    res = await fetch(`${http}${route}`, {
+      method: thisOptions.method,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: thisOptions.method !== "GET" ? JSON.stringify(body || {}) : undefined
+    });
+  }
   const json: ApiResponse<T> = await res.json();
   if(json.message === "Unauthenticated.") {
     Swal.fire({

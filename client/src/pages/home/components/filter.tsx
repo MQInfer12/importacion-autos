@@ -1,8 +1,6 @@
 import styled from 'styled-components'
-import Button from '../../../global/components/button';
 import Input from '../../../global/components/input';
 import Select from '../../../global/components/select';
-import { useNavigate } from 'react-router-dom';
 import { TypeFilter } from '..';
 
 interface Props {
@@ -13,8 +11,6 @@ interface Props {
 }
 
 const Filter = ({ typeFilter, setTypeFilter, filter, setFilter }: Props) => {
-  const navigate = useNavigate();
-
   return (
     <Container>
       <div>
@@ -29,7 +25,6 @@ const Filter = ({ typeFilter, setTypeFilter, filter, setFilter }: Props) => {
           onChange={e => setFilter(e.target.value)}
         />
       </div>
-      <Button onClick={() => navigate('/dashboard/form')}>Crear</Button>
     </Container>
   )
 }
