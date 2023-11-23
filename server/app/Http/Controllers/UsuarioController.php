@@ -79,6 +79,26 @@ class UsuarioController extends Controller
             "data" => $User
         ]);
     }
+    public function actualizarFirma(Request $request)
+    {
+        $User = auth()->user();
+        $User->nombre = $request->nombre;
+        $User->correo = $request->correo;
+        $User->RUT = $request->RUT;
+        $User->domicilio = $request->domicilio;
+        $User->nacionalidad = $request->nacionalidad;
+        $User->profesion = $request->profesion;
+        if ($request->file("firma") != null) {
+            $request->file("firma")->storeAs("/", $User->id . ".jpg");
+            $User->firma = $User->id . ".jpg";
+        }
+        $User->save();
+        return response()->json([
+            "status" => 1,
+            "message" => "Usuario actualizado correctamente",
+            "data" => $User
+        ]);
+    }
     public function show($id)
     {
         $Usuario = Usuario::find($id);
@@ -117,7 +137,7 @@ class UsuarioController extends Controller
         $user = Usuario::where("correo", "=", $request->correo)->first();
         if (isset($user->id)) {
             if (Hash::check($request->password, $user->password)) {
-                $userData=$user;
+                $userData = $user;
                 $token = $user->createToken("auth_token")->plainTextToken;
                 return response()->json([
                     "status" => 1,
