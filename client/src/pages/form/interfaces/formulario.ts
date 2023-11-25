@@ -38,6 +38,7 @@ export interface Formulario {
     serviciosCargosNaviero: string,
     serviciosCargosGruas: string,
     serviciosMultas: string,
+    serviciosCargosComision: string,
     anticiposCompraVehiculo: string,
     anticiposServicios: string,
     saldoPorCobrar: string,

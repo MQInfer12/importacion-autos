@@ -75,7 +75,7 @@ const Navbar = () => {
         <i className={`fa-solid fa-${open ? "xmark" : "bars"}`} />
       </ButtonBars>
       <LeftContainer open={open}>
-        <h1>Importaciones</h1>
+        <h1>HG Contabilidad</h1>
         <div>
           <StyledNavLink to='/dashboard/forms'>Formularios</StyledNavLink>
           {

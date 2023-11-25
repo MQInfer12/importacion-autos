@@ -120,6 +120,13 @@ class FormularioController extends Controller
     {
         $Formulario = Formulario::find($idForm);
         $User = auth()->user();
+        if($User->firma == null) {
+            return response()->json([
+                "status" => 3,
+                "message" => "Añade una firma desde tu perfil",
+                "data" => null
+            ]);
+        }
         if($Formulario->idUsuario == $User->id) {
             $Formulario->estado = "Firmado";
             $Formulario->save();

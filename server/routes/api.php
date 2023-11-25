@@ -16,8 +16,8 @@ use App\Http\Controllers\RespuestaController;
 |
 */
 Route::group(['middleware' => ["auth:sanctum"]], function () {
-    Route::get('me', [UsuarioController::class, 'usuarioPerfil']);
-    Route::get('logout', [UsuarioController::class, 'logout']);
+    Route::get('/me', [UsuarioController::class, 'usuarioPerfil']);
+    Route::get('/logout', [UsuarioController::class, 'logout']);
     Route::post('/profile', [UsuarioController::class, 'actualizarFirma']);
 
 

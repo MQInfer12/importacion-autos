@@ -97,6 +97,7 @@ const Content = ({ formulario, observacion }: Props) => {
       serviciosCargosNaviero: "",
       serviciosCargosGruas: "",
       serviciosMultas: "",
+      serviciosCargosComision: "",
       anticiposCompraVehiculo: "",
       anticiposServicios: "",
       saldoPorCobrar: "",
@@ -241,6 +242,16 @@ const Content = ({ formulario, observacion }: Props) => {
         </InputContainer>
       </Form.Section>
       <Form.Section text="Detalles del formulario">
+        {
+          formulario ?
+          <InputContainer text="OT">
+            <Input 
+              value={formulario.OT}
+              onChange={() => {}}
+              disabled={!!formulario && !observacion}
+            />
+          </InputContainer> : <></>
+        }
         <InputContainer text="Fecha">
           <Input 
             value={form.formularioFecha}
@@ -495,6 +506,14 @@ const Content = ({ formulario, observacion }: Props) => {
           <Input 
             value={form.serviciosMultas}
             onChange={e => setForm(old => ({...old, serviciosMultas: e.target.value }))}
+            type="number"
+            disabled={!!formulario && !observacion}
+          />
+        </InputContainer>
+        <InputContainer text="Cargo comisión por serv. logísticos">
+          <Input 
+            value={form.serviciosCargosComision}
+            onChange={e => setForm(old => ({...old, serviciosCargosComision: e.target.value }))}
             type="number"
             disabled={!!formulario && !observacion}
           />

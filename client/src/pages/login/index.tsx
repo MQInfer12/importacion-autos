@@ -56,7 +56,7 @@ const Login = () => {
       <BG />
       <BGG />
       <Form>
-        <h1>Importaciones</h1>
+        <h1>HG Contabilidad</h1>
         <h2>Iniciar sesión</h2>
         <InputContainer text='Correo electrónico'>
           <Input 

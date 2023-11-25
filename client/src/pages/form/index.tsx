@@ -10,6 +10,8 @@ import { sendRequest } from '../../utilities/sendRequest';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 import { colors } from '../../global/styles/colors';
+import { PDFViewer } from '@react-pdf/renderer';
+import FormularioReport from '../../reports/formularioReport';
 
 const FormPage = () => {
   const { id } = useParams();
@@ -19,6 +21,7 @@ const FormPage = () => {
   const [loadSign, setLoadSign] = useState(false);
   const [loadDecline, setLoadDecline] = useState(false);
   const [observacion, setObservacion] = useState<string | null>(null);
+  const [viewReport, setViewReport] = useState(false);
 
   const sureSign = () => {
     Swal.fire({
@@ -41,6 +44,13 @@ const FormPage = () => {
     const res = await sendRequest(`sign/${id}`, null, {
       method: "PATCH"
     });
+    if(res.status === 3) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: res.message
+      });
+    }
     if(res.status === 1) {
       Swal.fire({
         icon: "success",
@@ -96,6 +106,10 @@ const FormPage = () => {
     setLoadDecline(false);
   }
 
+  const handleReport = () => {
+    setViewReport(!viewReport);
+  }
+
   useEffect(() => {
     if(res && res.status === 1) {
       setEstado(res.data.estado);
@@ -110,7 +124,7 @@ const FormPage = () => {
     <Container>
       <header>
         <section>
-          <h2>{id ? "Ver" : "Nuevo"} formulario</h2>
+          <h2>{id ? viewReport ? `${res?.data.OT} en PDF` : "Formulario" : "Nuevo formulario"}</h2>
         </section>
         <div>
           {
@@ -118,9 +132,9 @@ const FormPage = () => {
             (user?.rol === "Cliente") ? (
               estado === "Firmado" ?
               <Button 
-                onClick={handleSign} 
+                onClick={handleReport} 
                 disabled={loading}
-              >PDF</Button> :
+              >{viewReport ? "Ver formulario" : "Ver PDF"}</Button> :
               estado === "Nuevo" ?
               <>
               <Button 
@@ -141,9 +155,9 @@ const FormPage = () => {
             ) : (
               estado === "Firmado" ?
               <Button 
-                onClick={handleSign} 
+                onClick={handleReport} 
                 disabled={loading}
-              >PDF</Button> :
+              >{viewReport ? "Ver formulario" : "Ver PDF"}</Button> :
               <></>
             )
           }
@@ -153,6 +167,12 @@ const FormPage = () => {
         {
           loading ?
           <Loading /> :
+          viewReport ?
+          <PDFViewer height={"100%"}>
+            <FormularioReport 
+              formulario={res?.data}
+            />
+          </PDFViewer> :
           <Content 
             formulario={res?.data}
             observacion={observacion}
