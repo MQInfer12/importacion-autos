@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/db678f56b4.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('hg-contabilidad/assets/index-9d19fe64.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/index-9d19fe64.css') }}" />
     <title>Importación Autos</title>
   </head>
   <body>
     <div id="root"></div>
-    <script src="{{ asset('hg-contabilidad/assets/index-3f288452.js') }}"></script>
+    <script src="{{ asset('assets/index-1fefc3da.js') }}"></script>
   </body>
 </html>
