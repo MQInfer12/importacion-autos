@@ -27,7 +27,7 @@ export const useGet = <T,>(route: string, load: boolean = true): ReturnData<T> =
 
   const getData = async () => {
     setLoading(true);
-    const token = document.cookie.replace("token=", "");
+    const token = document.cookie.replace("auth=", "");
     const res = await fetch(`${http}${route}`, token ? {
       headers: {
         "Accept": "application/json",

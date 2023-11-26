@@ -15,7 +15,7 @@ export const sendRequest = async <T,>(route: string, body: Record<string, any> |
   const thisOptions: Options = {
     method: options?.method || "POST",
   }
-  const token = document.cookie.replace("token=", "");
+  const token = document.cookie.replace("auth=", "");
   let res: any;
   if(body instanceof FormData) {
     res = await fetch(`${http}${route}`, {

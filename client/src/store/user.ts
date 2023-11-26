@@ -12,7 +12,7 @@ interface Functions {
 }
 
 export const useUser = create<State & Functions>(set => {
-  const token = document.cookie.replace("token=", "");
+  const token = document.cookie.replace("auth=", "");
   return {
     user: null,
     state: token ? "loading" : "unlogged",

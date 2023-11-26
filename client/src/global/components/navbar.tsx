@@ -23,7 +23,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     setLoading(true);
     /* COMPROBAMOS TOKEN EN COOKIE */
-    const token = document.cookie.replace("token=", "");
+    const token = document.cookie.replace("auth=", "");
     if(!token) {
       navigate("/");
       return Swal.fire({

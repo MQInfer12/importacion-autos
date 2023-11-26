@@ -38,7 +38,7 @@ const Login = () => {
           text: res.message
         });
         setUser(res.data.user);
-        document.cookie = `token=${res.data.access_token}; path=/; samesite=stric`;
+        document.cookie = `auth=${res.data.access_token}; path=/; samesite=stric`;
         navigate("/dashboard/forms");
       } else {
         Swal.fire({
