@@ -11,6 +11,7 @@ import { useUser } from '../../store/user';
 import Loading from './loading';
 import { useGet } from '../../hooks/useGet';
 import { User } from '../interfaces/user';
+import { getCookie } from '../../utilities/getCookie';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     setLoading(true);
     /* COMPROBAMOS TOKEN EN COOKIE */
-    const token = document.cookie.replace("auth=", "");
+    const token = getCookie("auth");
     if(!token) {
       navigate("/");
       return Swal.fire({
@@ -46,7 +47,7 @@ const Navbar = () => {
         });
       }
     }
-    document.cookie = `token=; max-age=0`;
+    document.cookie = `auth=; max-age=0`;
     logout();
     navigate("/");
     setLoading(false);

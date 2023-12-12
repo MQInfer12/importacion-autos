@@ -8,11 +8,13 @@ interface Props {
   placeholder?: string
   type?: string
   disabled?: boolean
+  id?: string
 }
 
-const Input = ({ placeholder, type = "text", disabled, value, onChange }: Props) => {
+const Input = ({ placeholder, type = "text", disabled, value, onChange, id }: Props) => {
   return (
     <StyledInput 
+      id={id}
       onChange={onChange}
       placeholder={placeholder}
       type={type}

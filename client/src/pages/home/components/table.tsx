@@ -38,6 +38,10 @@ const Table = ({ data }: Props) => {
                   <td>
                     <div className='buttons'>
                       <Button type="primary" onClick={() => navigate(`/dashboard/form/${formulario.id}`)}>Ver</Button>
+                    {
+                      formulario.estado === "Firmado" &&
+                      <Button type="secondary" onClick={() => navigate(`/dashboard/form/${formulario.id}/PDF`)}>PDF</Button>
+                    }
                     </div>
                   </td>
                 </tr>

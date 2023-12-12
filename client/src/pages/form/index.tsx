@@ -13,7 +13,11 @@ import { colors } from '../../global/styles/colors';
 import { PDFViewer } from '@react-pdf/renderer';
 import FormularioReport from '../../reports/formularioReport';
 
-const FormPage = () => {
+interface Props {
+  PDF?: boolean
+}
+
+const FormPage = ({ PDF }: Props) => {
   const { id } = useParams();
   const { res, loading } = useGet<FormularioShow>(`formulario/${id}`, !!id);
   const { user } = useUser();
@@ -21,7 +25,7 @@ const FormPage = () => {
   const [loadSign, setLoadSign] = useState(false);
   const [loadDecline, setLoadDecline] = useState(false);
   const [observacion, setObservacion] = useState<string | null>(null);
-  const [viewReport, setViewReport] = useState(false);
+  const [viewReport, setViewReport] = useState(!!PDF);
 
   const sureSign = () => {
     Swal.fire({
@@ -124,7 +128,7 @@ const FormPage = () => {
     <Container>
       <header>
         <section>
-          <h2>{id ? viewReport ? `${res?.data.OT} en PDF` : "Formulario" : "Nuevo formulario"}</h2>
+          <h2>{id ? viewReport ? res?.data ? `PDF ${res.data.OT}` : `PDF`  : "Formulario" : "Nuevo formulario"}</h2>
         </section>
         <div>
           {
@@ -171,6 +175,7 @@ const FormPage = () => {
           <PDFViewer height={"100%"}>
             <FormularioReport 
               formulario={res?.data}
+              handleReport={handleReport}
             />
           </PDFViewer> :
           <Content 

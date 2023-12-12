@@ -1,5 +1,6 @@
 import Swal from "sweetalert2"
 import { http } from "./http"
+import { getCookie } from "./getCookie"
 
 interface Options {
   method: string
@@ -15,7 +16,7 @@ export const sendRequest = async <T,>(route: string, body: Record<string, any> |
   const thisOptions: Options = {
     method: options?.method || "POST",
   }
-  const token = document.cookie.replace("auth=", "");
+  const token = getCookie("auth");
   let res: any;
   if(body instanceof FormData) {
     res = await fetch(`${http}${route}`, {

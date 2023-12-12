@@ -2,3 +2,4 @@
 //export const http = "/api/";
 export const http = "/hg-contabilidad/api/"
 //export const http = "http://localhost:8000/hg-contabilidad/api/"
+//export const http = "https://dgimportcar.com/hg-contabilidad/api/"

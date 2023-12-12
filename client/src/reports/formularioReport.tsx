@@ -1,12 +1,14 @@
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { FormularioShow } from '../global/interfaces/formulario';
 import { http } from '../utilities/http';
+import Swal from 'sweetalert2';
 
 interface Props {
   formulario?: FormularioShow
+  handleReport: () => void
 }
 
-const FormularioReport = ({ formulario }: Props) => {
+const FormularioReport = ({ formulario, handleReport }: Props) => {
   const findBy = (tipo: string) => {
     const respuesta = formulario?.respuestas.find(res => res.tipo === tipo);
     return respuesta?.dato;
@@ -32,8 +34,15 @@ const FormularioReport = ({ formulario }: Props) => {
     return servicios.reduce((acc, val) => acc + Number(val || 0), 0);
   }
 
-  console.log(formulario?.respuestas);
   if(!formulario) return null;
+  if(formulario.estado !== "Firmado") {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Este formulario no está firmado"
+    });
+    handleReport();
+  }
   return (
     <Document>
       <Page size="A4" style={styles.page}>

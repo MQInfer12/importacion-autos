@@ -7,11 +7,12 @@ interface Props {
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => any
   defaultOption?: string
+  id?: string
 }
 
-const Select = ({ children, defaultOption, onChange, value }: Props) => {
+const Select = ({ children, defaultOption, onChange, value, id }: Props) => {
   return (
-    <StyledInput value={value} onChange={onChange}>
+    <StyledInput value={value} onChange={onChange} id={id}>
       { defaultOption && <option value="">{ defaultOption }</option> }
       { children }
     </StyledInput>

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '../styles/colors'
+import { useId } from 'react'
 
 interface Props {
   text: string
@@ -9,15 +10,18 @@ interface Props {
 }
 
 const CheckInput = ({ text, value, onChange, disabled }: Props) => {
+  const id = useId();
+
   return (
     <Container>
       <input 
+        id={id}
         type='checkbox' 
         checked={value}
         onChange={onChange}
         disabled={disabled}
       />
-      <label>{text}</label>
+      <label htmlFor={id}>{text}</label>
     </Container>
   )
 }

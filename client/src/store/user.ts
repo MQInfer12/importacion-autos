@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { User } from "../global/interfaces/user";
+import { getCookie } from "../utilities/getCookie";
 
 interface State {
   user: User | null
@@ -12,7 +13,7 @@ interface Functions {
 }
 
 export const useUser = create<State & Functions>(set => {
-  const token = document.cookie.replace("auth=", "");
+  const token = getCookie("auth");
   return {
     user: null,
     state: token ? "loading" : "unlogged",

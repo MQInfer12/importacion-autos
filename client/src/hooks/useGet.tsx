@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { http } from "../utilities/http";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../utilities/getCookie";
 
 type ApiResponse<T> = {
   status: number,
@@ -27,7 +28,7 @@ export const useGet = <T,>(route: string, load: boolean = true): ReturnData<T> =
 
   const getData = async () => {
     setLoading(true);
-    const token = document.cookie.replace("auth=", "");
+    const token = getCookie("auth");
     const res = await fetch(`${http}${route}`, token ? {
       headers: {
         "Accept": "application/json",

@@ -4,12 +4,13 @@ import { colors } from '../styles/colors'
 interface Props {
   text: string
   children: JSX.Element | JSX.Element[]
+  id?: string
 }
 
-const InputContainer = ({ text, children }: Props) => {
+const InputContainer = ({ text, children, id }: Props) => {
   return (
     <Container>
-      <label>{text}</label>
+      <label htmlFor={id}>{text}</label>
       { children }
     </Container>
   )
