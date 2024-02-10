@@ -30,6 +30,9 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::get('/cliente', [UsuarioController::class, 'cliente']);
 
     Route::post('/formulario', [FormularioController::class, 'store']);
+    Route::post('/formulario/store/eraser', [FormularioController::class, 'storeEraser']);
+    Route::post('/formulario/check/{id}', [FormularioController::class, 'check']);
+    Route::post('/formulario/edit/{id}', [FormularioController::class, 'storeEdit']);
     Route::get('/formulario', [FormularioController::class, 'index']);
     Route::get('/formulario/{id}', [FormularioController::class, 'show']);
     Route::put('/formulario/{id}', [FormularioController::class, 'update']);

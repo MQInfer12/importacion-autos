@@ -103,6 +103,10 @@ export const TableContainer = styled.div`
           color: ${colors.red};
           background-color: ${colors.redBG};
         }
+        &.Borrador {
+          color: ${colors.blue};
+          background-color: ${colors.blueBG};
+        }
       }
     }
     th {

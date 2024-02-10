@@ -1,6 +1,6 @@
 import { User } from "./user"
 
-export type EstadoFormulario = "Nuevo" | "Firmado" | "Declinado"
+export type EstadoFormulario = "Nuevo" | "Firmado" | "Declinado" | "Borrador"
 
 export interface FormularioRes {
   id: number

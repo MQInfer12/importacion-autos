@@ -19,5 +19,5 @@ Route::get("/", function () {
 });
 
 /* Route::get('/foo', function () {
-    Artisan::call('storage:link');
+    return bcrypt("123456");
 }); */

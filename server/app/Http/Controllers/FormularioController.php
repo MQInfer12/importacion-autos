@@ -17,7 +17,7 @@ class FormularioController extends Controller
             ->select("formularios.*", "usuarios.nombre as nombre_usuario", "respuestas.dato as fecha")
             ->where("respuestas.tipo", "=", "formularioFecha");
         if ($user->rol == 'Cliente') {
-            $Formularios->where("formularios.idUsuario", "=", $user->id);
+            $Formularios->where("formularios.idUsuario", "=", $user->id)->where("formularios.estado", "!=", "Borrador");
         }
         $Formularios = $Formularios->orderBy('created_at', 'desc')->get();
         return response()->json([
@@ -26,6 +26,7 @@ class FormularioController extends Controller
             'data' => $Formularios
         ]);
     }
+
     public function store(Request $request)
     {
         $request->validate(
@@ -68,29 +69,109 @@ class FormularioController extends Controller
             'data' => $Formulario
         ]);
     }
+
+    public function storeEraser(Request $request)
+    {
+        $request->validate(
+            [
+                'idUsuario' => 'required|integer'
+            ],
+            [
+                "idUsuario.required" => "El usuario es requerido"
+            ]
+        );
+        // CREAR FORMULARIO
+        $Formulario = new Formulario();
+        $Formulario->idUsuario = $request->idUsuario;
+        $Formulario->OT = '';
+        $Formulario->estado = "Borrador";
+        $Formulario->observacion = null;
+        $Formulario->save();
+        $year = date('Y');
+        $Formulario->OT = $Formulario->id . "-" . $year;
+        $Formulario->save();
+
+        //CREAR LAS RESPUESTAS DEL FORMULARIO
+        $respuestas = $request->respuestas;
+        foreach ($respuestas as $key => $value) {
+            $Respuesta = new Respuesta();
+            $Respuesta->idFormulario = $Formulario->id;
+            $Respuesta->tipo = $key;
+            if ($value == null) {
+                $Respuesta->dato = "";
+            } else {
+                $Respuesta->dato = $value;
+            }
+            $Respuesta->save();
+        }
+
+        //DEVOLVEMOS EL FORMULARIO
+        return response()->json([
+            'status' => 1,
+            'message' => 'Borrador guardado correctamente',
+            'data' => $Formulario
+        ]);
+    }
+
+    public function storeEdit(Request $request, $id)
+    {
+        $delete = Respuesta::where("idFormulario", intval($id))->delete();
+        if(!$delete) {
+            return response()->json([
+                'status' => 2,
+                'message' => 'Ocurrió un error inesperado',
+                'data' => ""
+            ]);
+        }
+        //CREAR LAS RESPUESTAS DEL FORMULARIO
+        $respuestas = $request->respuestas;
+        foreach ($respuestas as $key => $value) {
+            $Respuesta = new Respuesta();
+            $Respuesta->idFormulario = intval($id);
+            $Respuesta->tipo = $key;
+            if ($value == null) {
+                $Respuesta->dato = "";
+            } else {
+                $Respuesta->dato = $value;
+            }
+            $Respuesta->save();
+        }
+        return response()->json([
+            'status' => 1,
+            'message' => 'Formulario editado correctamente',
+            'data' => ""
+        ]);
+    }
+    
     public function show($id)
     {
         $User = auth()->user();
         $Formulario = Formulario::with("respuestas")->with("usuario")->find($id);
-        if ($Formulario) {
-            if($User->rol === "Admin" || $Formulario->idUsuario == $User->id) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => "Formulario encontrado",
-                    "data" => $Formulario
-                ]);
-            }
-            return response()->json([
-                'status' => 3,
-                'message' => "No tienes permisos para ver esto",
-                "data" => null
-            ]);
-        } else {
+        if($Formulario == null) {
             return response()->json([
                 'status' => 2,
                 'message' => "Formulario no encontrado"
             ]);
         }
+        if($User->rol == "Admin" || $Formulario->idUsuario == $User->id) {
+            if($Formulario->estado == "Borrador" && $User->rol != "Admin") {
+                return response()->json([
+                    'status' => 3,
+                    'message' => "No tienes permisos para ver esto",
+                    "data" => null
+                ]);
+            }
+            return response()->json([
+                'status' => 1,
+                'message' => "Formulario encontrado",
+                "data" => $Formulario
+            ]);
+        }
+        return response()->json([
+            'status' => 3,
+            'message' => "No tienes permisos para ver esto",
+            "data" => null
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -161,6 +242,18 @@ class FormularioController extends Controller
             "status" => 2,
             "message" => "No tienes permisos para hacer esto",
             "data" => null
+        ]);
+    }
+
+    public function check($id)
+    {
+        $Formulario = Formulario::find($id);
+        $Formulario->estado = "Nuevo";
+        $Formulario->save();
+        return response()->json([
+            "status" => 1,
+            "message" => "Formulario enviado correctamente",
+            "data" => $Formulario
         ]);
     }
 }

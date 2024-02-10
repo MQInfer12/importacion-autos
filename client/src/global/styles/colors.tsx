@@ -14,4 +14,6 @@ export const colors = {
   greenBG: "rgba(145, 197, 97, 0.12)",
   red: "#d65943",
   redBG: "rgba(197, 97, 97, 0.12)",
+  blue: "#3850bb",
+  blueBG: "rgba(104, 97, 197, 0.12)",
 }
