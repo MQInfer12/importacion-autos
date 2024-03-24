@@ -23,6 +23,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
 
     Route::post('/registro', [UsuarioController::class, 'registro']);
     Route::get('/usuario', [UsuarioController::class, 'index']);
+    Route::patch('/password/{id}', [UsuarioController::class, 'password']);
     Route::delete('/usuario/{id}', [UsuarioController::class, 'destroy']);
     Route::get('/perfilusuario', [UsuarioController::class, 'usuarioPerfil']);
     Route::put('/usuario/{id}', [UsuarioController::class, 'update']);

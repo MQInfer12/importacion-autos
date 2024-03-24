@@ -16,6 +16,7 @@ const Filter = ({ typeFilter, setTypeFilter, filter, setFilter }: Props) => {
       <div>
         <Select value={typeFilter} onChange={e => setTypeFilter(e.target.value as TypeFilter)}>
           <option value="nombre">Nombre</option>
+          <option value="cliente">Cliente</option>
           <option value="OT">OT</option>
           <option value="fecha">Fecha</option>
         </Select>

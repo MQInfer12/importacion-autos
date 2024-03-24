@@ -9,7 +9,7 @@ import { useUser } from "../../store/user"
 import Button from "../../global/components/button"
 import { useNavigate } from "react-router-dom"
 
-export type TypeFilter = "nombre" | "fecha" | "OT"
+export type TypeFilter = "nombre" | "fecha" | "cliente" | "OT"
 
 const Home = () => {
   const { res } = useGet<FormularioRes[]>("formulario")
@@ -46,6 +46,7 @@ const Home = () => {
               filterBy(
                 typeFilter === "nombre" ? formulario.nombre_usuario : 
                 typeFilter === "fecha" ? formulario.fecha :
+                typeFilter === "cliente" ? formulario.nombre_usuario :
                 formulario.OT,
                 filter
               )

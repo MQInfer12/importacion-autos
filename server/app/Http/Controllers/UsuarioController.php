@@ -63,6 +63,13 @@ class UsuarioController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $loggedUser = auth()->user();
+        if($loggedUser->rol != "Admin") {
+            return response()->json([
+                "status" => 2,
+                "message" => "No tienes permisos para hacer esto",
+            ]);
+        }
         $User = Usuario::find($id);
         $User->nombre = $request->nombre;
         $User->correo = $request->correo;
@@ -72,6 +79,9 @@ class UsuarioController extends Controller
         $User->nacionalidad = $request->nacionalidad;
         $User->profesion = $request->profesion;
         $User->firma = $request->firma;
+        if($request->password != "") {
+            $User->password = bcrypt($request->password);
+        }
         $User->save();
         return response()->json([
             "status" => 1,
@@ -184,6 +194,51 @@ class UsuarioController extends Controller
             "status" => 0,
             "message" => "Usuario recuperado correctamente",
             "data" => auth()->user()
+        ]);
+    }
+    public function password($id, Request $request)
+    {
+        $request->validate([
+            "oldPassword" => "required",
+            "newPassword" => "required",
+            "newPasswordRepeat" => "required"
+        ], [
+            'oldPassword.required' => "La contraseña anterior es obligatoria",
+            "newPassword.required" => "La contraseña nueva es obligatoria",
+            "newPasswordRepeat.required" => "La confirmación es obligatoria"
+        ]);
+
+        $loggedUser = auth()->user();
+        if($loggedUser->id != $id && $loggedUser->rol != "Admin") {
+            return response()->json([
+                'status' => 2,
+                'message' => "No estas autorizado para hacer esto"
+            ]);
+        }
+        $user = Usuario::find($id);
+        if ($user == null) {
+            return response()->json([
+                'status' => 2,
+                'message' => "Usuario no encontrado"
+            ]);
+        } 
+        if (!Hash::check($request->oldPassword, $user->password)) {
+            return response()->json([
+                'status' => 2,
+                'message' => "La contraseña anterior es incorrecta"
+            ]);
+        }
+        if($request->newPassword != $request->newPasswordRepeat) {
+            return response()->json([
+                'status' => 2,
+                'message' => "La contraseñas no coinciden"
+            ]);
+        }
+        $user->password = bcrypt($request->newPassword);
+        $user->save();
+        return response()->json([
+            'status' => 1,
+            'message' => "Contraseña cambiada correctamente"
         ]);
     }
 }

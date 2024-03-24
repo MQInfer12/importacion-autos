@@ -3,7 +3,7 @@ import { mixins } from '../styles/mixins'
 import { colors } from '../styles/colors'
 
 interface FormProps {
-  children: JSX.Element[] | JSX.Element
+  children: React.ReactNode
 }
 
 const Form = ({ children }: FormProps) => {

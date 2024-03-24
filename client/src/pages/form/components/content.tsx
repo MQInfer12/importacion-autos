@@ -4,7 +4,6 @@ import Input from "../../../global/components/input";
 import InputContainer from "../../../global/components/inputContainer";
 import styled from "styled-components";
 import CheckInput from "../../../global/components/checkInput";
-import Select from "../../../global/components/select";
 import { useState } from "react";
 import { User } from "../../../global/interfaces/user";
 import { sendRequest } from "../../../utilities/sendRequest";
@@ -15,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { FormularioShow } from "../../../global/interfaces/formulario";
 import { useUser } from "../../../store/user";
 import { colors } from "../../../global/styles/colors";
+import ReactSelect from "react-select";
 
 interface Props {
   formulario?: FormularioShow;
@@ -30,8 +30,8 @@ const Content = ({ formulario, observacion }: Props) => {
   const [selectedUserId, setSelectedUserId] = useState<string>(
     formulario ? String(formulario.idUsuario) : ""
   );
-  const handleChangeUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedUserId(e.target.value);
+  const handleChangeUser = (opt: any) => {
+    setSelectedUserId(String(opt.value));
   };
   const selectedUser: User | undefined = formulario
     ? formulario.usuario
@@ -48,6 +48,13 @@ const Content = ({ formulario, observacion }: Props) => {
       documentoSwift: newForm.documentoSwift === "SI",
       documentoDispach: newForm.documentoDispach === "SI",
       documentoBL: newForm.documentoBL === "SI",
+      documentoContratoCompraVenta:
+        newForm.documentoContratoCompraVenta === "SI",
+      documentoSrf: newForm.documentoSrf === "SI",
+      documentoCrt: newForm.documentoCrt === "SI",
+      documentoDus: newForm.documentoDus === "SI",
+      documentoMic: newForm.documentoMic === "SI",
+      documentoZeta: newForm.documentoZeta === "SI",
       documentoOtros: newForm.documentoOtros === "SI",
       pagoTransferencia: newForm.pagoTransferencia === "SI",
       pagoDeposito: newForm.pagoDeposito === "SI",
@@ -66,7 +73,9 @@ const Content = ({ formulario, observacion }: Props) => {
           importadoraRUT: "",
           importadoraDireccion: "",
           formularioFecha: `${hoy.getFullYear()}-${
-            hoy.getMonth() + 1
+            hoy.getMonth() + 1 < 10
+              ? `0${hoy.getMonth() + 1}`
+              : hoy.getMonth() + 1
           }-${hoy.getDate()}`,
           formularioCiudad: "Cochabamba",
           formularioPais: "Bolivia",
@@ -80,6 +89,12 @@ const Content = ({ formulario, observacion }: Props) => {
           documentoSwift: false,
           documentoDispach: false,
           documentoBL: false,
+          documentoZeta: false,
+          documentoSrf: false,
+          documentoContratoCompraVenta: false,
+          documentoCrt: false,
+          documentoDus: false,
+          documentoMic: false,
           documentoOtros: false,
           pagoTransferencia: false,
           pagoDeposito: false,
@@ -119,7 +134,9 @@ const Content = ({ formulario, observacion }: Props) => {
     Swal.fire({
       icon: "warning",
       title: "¿Continuar?",
-      text: "Enviarás este formulario para que el mandante lo revise",
+      text: borrador
+        ? "Se guardará un borrador de este formulario"
+        : "Enviarás este formulario para que el mandante lo revise",
       showDenyButton: true,
       confirmButtonText: "Confirmar",
       confirmButtonColor: colors.gray500,
@@ -259,6 +276,10 @@ const Content = ({ formulario, observacion }: Props) => {
     return false;
   };
 
+  const formatDolar = (num: string) => {
+    return `Total: ${num ? `${Intl.NumberFormat("de-DE").format(+num)} US$` : ""}`;
+  };
+
   const disabled = getDisabled();
   return (
     <Form>
@@ -321,8 +342,32 @@ const Content = ({ formulario, observacion }: Props) => {
         text="Datos del mandante"
         input={
           !formulario ? (
-            <InputContainer text="Seleccionar cliente" id="selectCliente">
-              <Select
+            <InputContainer
+              widthFull
+              text="Seleccionar cliente"
+              id="selectCliente"
+            >
+              <ReactSelect
+                styles={{
+                  option: (base) => ({
+                    ...base,
+                    fontSize: "14px",
+                    cursor: "pointer",
+                  }),
+                }}
+                isSearchable
+                placeholder="Seleccionar cliente"
+                noOptionsMessage={() => "Ninguna opción encontrada"}
+                isLoading={!clientesRes}
+                options={
+                  clientesRes?.data.map((user) => ({
+                    value: user.id,
+                    label: user.nombre,
+                  })) || []
+                }
+                onChange={handleChangeUser}
+              />
+              {/* <Select
                 id="selectCliente"
                 defaultOption="Seleccionar cliente"
                 onChange={handleChangeUser}
@@ -336,7 +381,7 @@ const Content = ({ formulario, observacion }: Props) => {
                 ) : (
                   <></>
                 )}
-              </Select>
+              </Select> */}
             </InputContainer>
           ) : undefined
         }
@@ -496,6 +541,65 @@ const Content = ({ formulario, observacion }: Props) => {
           value={form.documentoBL}
           onChange={(e) =>
             setForm((old) => ({ ...old, documentoBL: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="BL."
+          value={form.documentoBL}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoBL: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Zeta"
+          value={form.documentoZeta || false}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoZeta: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Srf"
+          value={form.documentoSrf || false}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoSrf: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Contrato de compra y venta"
+          value={form.documentoContratoCompraVenta || false}
+          onChange={(e) =>
+            setForm((old) => ({
+              ...old,
+              documentoContratoCompraVenta: e.target.checked,
+            }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Dus"
+          value={form.documentoDus || false}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoDus: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Mic"
+          value={form.documentoMic || false}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoMic: e.target.checked }))
+          }
+          disabled={disabled}
+        />
+        <CheckInput
+          text="Crt"
+          value={form.documentoCrt || false}
+          onChange={(e) =>
+            setForm((old) => ({ ...old, documentoCrt: e.target.checked }))
           }
           disabled={disabled}
         />
@@ -707,6 +811,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosCompraVehiculo)}
           />
         </InputContainer>
         <InputContainer
@@ -724,6 +829,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosRepresentacionMandato)}
           />
         </InputContainer>
         <InputContainer
@@ -741,6 +847,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosCargosNaviero)}
           />
         </InputContainer>
         <InputContainer
@@ -758,6 +865,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosCargosGruas)}
           />
         </InputContainer>
         <InputContainer
@@ -772,6 +880,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosMultas)}
           />
         </InputContainer>
         <InputContainer
@@ -789,6 +898,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.serviciosCargosComision)}
           />
         </InputContainer>
       </Form.Section>
@@ -805,6 +915,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.anticiposCompraVehiculo)}
           />
         </InputContainer>
         <InputContainer text="Servicios logísticos" id="anticiposServicios">
@@ -816,6 +927,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.anticiposServicios)}
           />
         </InputContainer>
       </Form.Section>
@@ -829,6 +941,7 @@ const Content = ({ formulario, observacion }: Props) => {
             }
             type="number"
             disabled={disabled}
+            small={formatDolar(form.saldoPorCobrar)}
           />
         </InputContainer>
       </Form.Section>

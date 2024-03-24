@@ -1,30 +1,42 @@
-import styled from 'styled-components'
-import { mixins } from '../styles/mixins'
-import { colors } from '../styles/colors'
+import styled from "styled-components";
+import { mixins } from "../styles/mixins";
+import { colors } from "../styles/colors";
 
 interface Props {
-  value: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  placeholder?: string
-  type?: string
-  disabled?: boolean
-  id?: string
+  value: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  type?: string;
+  disabled?: boolean;
+  id?: string;
+  small?: string;
 }
 
-const Input = ({ placeholder, type = "text", disabled, value, onChange, id }: Props) => {
+const Input = ({
+  placeholder,
+  type = "text",
+  disabled,
+  value,
+  onChange,
+  id,
+  small,
+}: Props) => {
   return (
-    <StyledInput 
-      id={id}
-      onChange={onChange}
-      placeholder={placeholder}
-      type={type}
-      disabled={disabled}
-      value={value}
-    />
-  )
-}
+    <>
+      <StyledInput
+        id={id}
+        onChange={onChange}
+        placeholder={placeholder}
+        type={type}
+        disabled={disabled}
+        value={value}
+      />
+      {small && <StyledSmall>{small}</StyledSmall>}
+    </>
+  );
+};
 
-export default Input
+export default Input;
 
 const StyledInput = styled.input`
   padding: 10px 20px;
@@ -41,4 +53,10 @@ const StyledInput = styled.input`
   &:disabled {
     background-color: ${colors.gray100};
   }
+`;
+
+const StyledSmall = styled.small`
+  padding: 0 10px;
+  font-size: 12px;
+  color: ${colors.gray300};
 `;
