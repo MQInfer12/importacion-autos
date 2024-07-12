@@ -11,6 +11,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script src="{{ asset('hg-contabilidad/assets/index-8fc4d771.js') }}"></script>
+    <script src="{{ asset('hg-contabilidad/assets/index-4717fe7d.js') }}"></script>
   </body>
 </html>

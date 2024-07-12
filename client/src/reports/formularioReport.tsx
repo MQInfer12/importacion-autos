@@ -153,7 +153,7 @@ const FormularioReport = ({ formulario, handleReport }: Props) => {
                   </Text>
                 </View>
               </View>
-              <View style={styles2.row1LeftTable}>
+              {/* <View style={styles2.row1LeftTable}>
                 <View style={styles2.row1LeftTableRow}>
                   <Text style={[styles.text, stylesTable5.leftText]}>
                     5) LEGALIDAD
@@ -231,56 +231,7 @@ const FormularioReport = ({ formulario, handleReport }: Props) => {
                     {findBy("legalidadVariosFecha")}
                   </Text>
                 </View>
-              </View>
-            </View>
-            <View style={styles.headerContainer}>
-              <View style={styles2.row1LeftTable}>
-                <Text style={[styles.text, styles2.row1LeftTitle]}>
-                  2) EL MANDANTE REQUIERE EL VEHÍCULO:
-                </Text>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>
-                    MARCA:
-                  </Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoMarca")}
-                  </Text>
-                </View>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>
-                    MODELO:
-                  </Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoModelo")}
-                  </Text>
-                </View>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>AÑO:</Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoYear")}
-                  </Text>
-                </View>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>VIN:</Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoVIN")}
-                  </Text>
-                </View>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>OBS:</Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoOBS")}
-                  </Text>
-                </View>
-                <View style={styles2.row1LeftTableRow}>
-                  <Text style={[styles.text, styles2.row1LeftText]}>
-                    OTROS:
-                  </Text>
-                  <Text style={[styles.text, styles2.row1RightText]}>
-                    {findBy("vehiculoOtros")}
-                  </Text>
-                </View>
-              </View>
+              </View> */}
               <View style={stylesTable5.bigTable}>
                 <View style={styles2.row1LeftTableRow}>
                   <Text style={[styles.text, stylesTable5.minText]}>
@@ -359,6 +310,55 @@ const FormularioReport = ({ formulario, handleReport }: Props) => {
                   </Text>
                   <Text style={[styles.text, stylesTable5.minText]}>
                     {formatDolar(calcTotalServicios())}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.headerContainer}>
+              <View style={styles2.row1LeftTable}>
+                <Text style={[styles.text, styles2.row1LeftTitle]}>
+                  2) EL MANDANTE REQUIERE EL VEHÍCULO:
+                </Text>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>
+                    MARCA:
+                  </Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoMarca")}
+                  </Text>
+                </View>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>
+                    MODELO:
+                  </Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoModelo")}
+                  </Text>
+                </View>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>AÑO:</Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoYear")}
+                  </Text>
+                </View>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>VIN:</Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoVIN")}
+                  </Text>
+                </View>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>OBS:</Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoOBS")}
+                  </Text>
+                </View>
+                <View style={styles2.row1LeftTableRow}>
+                  <Text style={[styles.text, styles2.row1LeftText]}>
+                    OTROS:
+                  </Text>
+                  <Text style={[styles.text, styles2.row1RightText]}>
+                    {findBy("vehiculoOtros")}
                   </Text>
                 </View>
               </View>

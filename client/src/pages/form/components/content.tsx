@@ -277,7 +277,9 @@ const Content = ({ formulario, observacion }: Props) => {
   };
 
   const formatDolar = (num: string) => {
-    return `Total: ${num ? `${Intl.NumberFormat("de-DE").format(+num)} US$` : ""}`;
+    return `Total: ${
+      num ? `${Intl.NumberFormat("de-DE").format(+num)} US$` : ""
+    }`;
   };
 
   const disabled = getDisabled();
@@ -646,7 +648,7 @@ const Content = ({ formulario, observacion }: Props) => {
           disabled={disabled}
         />
       </Form.Section>
-      <Form.Section text="Legalidad (días, vencimiento)">
+      {/* <Form.Section text="Legalidad (días, vencimiento)">
         <InputContainer text="VIN" id="legalidadVINDias">
           <Input
             id="legalidadVINDias"
@@ -794,7 +796,7 @@ const Content = ({ formulario, observacion }: Props) => {
             disabled={disabled}
           />
         </InputContainer>
-      </Form.Section>
+      </Form.Section> */}
       <Form.Section text="Servicios logísticos a cobrar (US$)">
         <InputContainer
           text="Compra del vehículo con mandato"
